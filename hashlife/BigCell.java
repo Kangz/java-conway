@@ -57,7 +57,7 @@ public class BigCell extends MacroCell {
 		int factor = ((int) Math.pow(2, depth))/2;
 		return quad[2*(i/factor) + j/factor].part(depth-1, i%factor, j%factor);
 	}
-	
+//test	
 	public MacroCell oneStep() {
 		
 		if(off)
