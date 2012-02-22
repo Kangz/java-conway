@@ -4,27 +4,23 @@ import java.util.HashMap;
 
 abstract public class MacroCell {
 	
-	static private HashMap<MacroCell, MacroCell> built = new HashMap<MacroCell, MacroCell>();
 	static private HashMap<Integer, MacroCell> empty = new HashMap<Integer, MacroCell>();
 	
 	final public int n;
+	final public int size; // 2^n
+	final public boolean off; // True if the MacroCell is completely off
 	
-	protected MacroCell(int n) {
+	protected MacroCell(int n, boolean off) {
 		this.n = n;
+		this.size = (int) Math.pow(2, n);
+		this.off = off;
 	}
 	
-	static public MacroCell get(MacroCell m0, MacroCell m1, MacroCell m2, MacroCell m3) {
-		assert(m0.n == m1.n && m1.n == m2.n && m2.n == m3.n);
-		MacroCell m = new BigCell(m0, m1, m2, m3);
-
-		if(built.containsKey(m))
-			m = built.get(m);
-		else
-			built.put(m, m);
-		
-		return m;
+	static public MacroCell get(MacroCell ... quad) {
+		return BigCell.get(quad);
 	}
 	
+	// Return an empty MacroCell of dimension n
 	static public MacroCell empty(Integer n) {
 		if(empty.containsKey(n))
 			return empty.get(n);
@@ -34,50 +30,18 @@ abstract public class MacroCell {
 			return e;
 		}
 		MacroCell e = empty(n-1);
-		MacroCell m = get(e, e, e, e);
+		MacroCell m = BigCell.get(e, e, e, e);
 		empty.put(n, m);
 		return m;
+	}	
+	
+	final public boolean[][] toTab() {
+		boolean[][] tab = new boolean[size][size];
+		fillTab(tab, 0, 0);
+		return tab;
 	}
 	
-	static public MacroCell get(MacroCell[] quad) {
-		return get(quad[0], quad[1], quad[2], quad[3]);
-	}
-	
-	abstract public MacroCell part(int depth, int i, int j);
-	abstract public MacroCell result(int s);
-	abstract public boolean[][] toTab();
-	
-	public boolean isEmpty() {
-		return equals(empty(n));
-	}
-	
-	abstract public MacroCell simplify();
-	abstract public MacroCell borderize();
-	
-	public MacroCell evolve(int t) {
-		MacroCell r = this.simplify();
-		
-		int n=1, s=0;
-		while(n < t) {
-			n *= 2;
-			s += 1;
-		}
-		while(r.n - 3 < s)
-			r = r.borderize();
-		System.out.println(s);
-		while(t > 0) {
-			if((t&n) != 0) {
-				r = r.result(s).borderize();
-				t -= n;
-			}
-			n /= 2;
-			s -= 1;
-		}
-		
-		return r.simplify();
-	}
-	
-	public String niceString() {
+	final public String niceString() {
 		boolean[][] t = toTab();
 		String s = "";
 		
@@ -89,5 +53,12 @@ abstract public class MacroCell {
 		
 		return s;
 	}
+	
+	abstract public MacroCell part(int depth, int i, int j);
+	abstract public MacroCell result(int s);
+	abstract public MacroCell evolve(int t);
+	abstract public void fillTab(boolean[][] tab, int i, int j);
+	abstract public MacroCell simplify();
+	abstract public MacroCell borderize();
 	
 }

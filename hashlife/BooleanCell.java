@@ -8,16 +8,12 @@ public class BooleanCell extends MacroCell {
 	
 	
 	private BooleanCell(boolean v) {
-		super(0);
+		super(0, !v);
 		this.v = v;
 	}
 	
 	public boolean equals(Object o) {
-		return (o instanceof BooleanCell) && equals((BooleanCell) o);
-	}
-	
-	public boolean equals(BooleanCell m) {
-		return v.equals(m.v);		
+		return (o instanceof BooleanCell) && v.equals(((BooleanCell) o).v);
 	}
 	
 	public int hashCode() {
@@ -42,10 +38,12 @@ public class BooleanCell extends MacroCell {
 		throw new RuntimeException("Cannot return the result of a 1x1 cell");
 	}
 	
-	public boolean[][] toTab() {
-		boolean[][] t = new boolean[1][1];
-		t[0][0] = v;
-		return t;
+	public MacroCell evolve(int t) {
+		throw new RuntimeException("A BooleanCell cannot evolve");
+	}
+	
+	public void fillTab(boolean[][] tab, int i, int j) {
+		tab[i][j] = v;
 	}
 	
 }

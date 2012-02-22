@@ -1,9 +1,12 @@
 package hashlife;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class BigCell extends MacroCell {
 
+	static private HashMap<MacroCell, MacroCell> built = new HashMap<MacroCell, MacroCell>();
+	
 	/*  +---+---+
 	 *  | 0 | 1 |
 	 *  +---+---+
@@ -13,26 +16,30 @@ public class BigCell extends MacroCell {
 	final protected MacroCell quad[] = new MacroCell[4];
 	private MacroCell result[];
 	
-	public BigCell(MacroCell m0, MacroCell m1, MacroCell m2, MacroCell m3) {
-		super(m0.n + 1);
-		this.quad[0] = m0;
-		this.quad[1] = m1;
-		this.quad[2] = m2;
-		this.quad[3] = m3;
+	private BigCell(MacroCell ... quad) {
+		super(quad[0].n+1, quad[0].off && quad[1].off && quad[2].off && quad[3].off);
+		for(int i=0; i<4; i++)
+			this.quad[i] = quad[i];
 		this.result = new MacroCell[this.n-1];
+		
+		if(this.off)
+			Arrays.fill(this.result, empty(this.n-1));
 	}
 	
-	public BigCell(MacroCell quad[]) {
-		super(quad[0].n+1);
-		Arrays.fill(this.quad, quad);
+	static public MacroCell get(MacroCell ... quad) {
+		assert(quad.length == 4 && quad[0].n == quad[1].n && quad[1].n == quad[2].n && quad[2].n == quad[3].n);
+		MacroCell m = new BigCell(quad);
+	
+		if(built.containsKey(m))
+			m = built.get(m);
+		else
+			built.put(m, m);
+		
+		return m;
 	}
 	
 	public boolean equals(Object o) {
-		return (o instanceof BigCell) && equals((BigCell) o);
-	}
-	
-	public boolean equals(BigCell m) {
-		return Arrays.equals(quad, m.quad);		
+		return (o instanceof BigCell) && Arrays.equals(quad, ((BigCell) o).quad);
 	}
 	
 	public int hashCode() {
@@ -52,9 +59,12 @@ public class BigCell extends MacroCell {
 	}
 	
 	public MacroCell oneStep() {
-		if(n == 2) {			
-			MacroCell tmp[] = new BooleanCell[4];
+		
+		if(off)
+			return empty(n-1);
 
+		MacroCell resQuad[] = new MacroCell[4];
+		if(n == 2) {
 			for(int i=0; i<4; i++) {
 				int baseI = 1+i/2, baseJ = 1+i%2;
 				int count = 0;
@@ -63,35 +73,31 @@ public class BigCell extends MacroCell {
 						count++;
 
 				if(count == 2)
-					tmp[i] = part(2, baseI, baseJ);
+					resQuad[i] = part(2, baseI, baseJ);
 				else if(count == 3)
-					tmp[i] = BooleanCell.True;
+					resQuad[i] = BooleanCell.True;
 				else
-					tmp[i] = BooleanCell.False;
-			}		
-			return get(tmp);
+					resQuad[i] = BooleanCell.False;
+			}
+		} else {			
+			MacroCell tmp[][] = new MacroCell[3][3];
+			MacroCell cut[][] = new MacroCell[6][6];
+			for(int i=0; i<6; i++)
+				for(int j=0; j<6; j++)
+					cut[i][j] = part(3, i+1, j+1);
+			for(int i=0; i<3; i++)
+				for(int j=0; j<3; j++)
+					tmp[i][j] = get(cut[i*2][j*2], cut[i*2][j*2+1], cut[i*2+1][j*2], cut[i*2+1][j*2+1]);
+			for(int i=0; i<4; i++)
+				resQuad[i] = get(tmp[i/2][i%2], tmp[i/2][i%2+1], tmp[i/2+1][i%2], tmp[i/2+1][i%2+1]).result(0);
 		}
-		
-		MacroCell resQuad[] = new MacroCell[4];
-		MacroCell tmp[][] = new MacroCell[3][3];
-		MacroCell cut[][] = new MacroCell[6][6];
-		for(int i=0; i<6; i++)
-			for(int j=0; j<6; j++)
-				cut[i][j] = part(3, i+1, j+1);
-		for(int i=0; i<3; i++)
-			for(int j=0; j<3; j++)
-				tmp[i][j] = get(cut[i*2][j*2], cut[i*2][j*2+1], cut[i*2+1][j*2], cut[i*2+1][j*2+1]);
-		for(int i=0; i<4; i++)
-			resQuad[i] = get(tmp[i/2][i%2], tmp[i/2][i%2+1], tmp[i/2+1][i%2], tmp[i/2+1][i%2+1]).result(0);
-		
-		return get(resQuad);		
+		return get(resQuad);	
 	}
 	
 	public MacroCell result(int s) {
 		if(s > n-2)
 			throw new RuntimeException("Cannot return the result at time " + s + " of a " + n + " cell");
-		if(s == -1)
-			return this;
+		
 		if(result[s] != null)
 			return result[s];
 		
@@ -100,8 +106,7 @@ public class BigCell extends MacroCell {
 			return result[0];
 		}
 		
-		// Case n > 2
-
+		// Case s > 0
 		MacroCell tmp[][] = new MacroCell[3][3];
 		MacroCell hexa[][] = new MacroCell[4][4];
 		for(int i=0; i<4; i++)
@@ -115,7 +120,6 @@ public class BigCell extends MacroCell {
 			tmp[1][i*2] = get(hexa[1][i*2], hexa[1][i*2+1], hexa[2][i*2], hexa[2][i*2+1]).result(s-1);
 		}
 		tmp[1][1] = get(hexa[1][1], hexa[1][2], hexa[2][1], hexa[2][2]).result(s-1);
-		
 				
 		MacroCell resQuad[] = new MacroCell[4];		
 		for(int i=0; i<4; i++)
@@ -125,34 +129,56 @@ public class BigCell extends MacroCell {
 		return result[s];
 	}
 	
+	public MacroCell evolve(int t) {
+		MacroCell r = this.simplify();
+		
+		int n=1, s=0;
+		while(n < t) {
+			n *= 2;
+			s += 1;
+		}
+		do {
+			r = r.borderize();
+		} while(r.n - 2 < s);
+		while(n > 0) {
+			if((t&n) != 0)
+				r = r.result(s).borderize();
+			n /= 2;
+			s -= 1;
+		}
+		
+		return r.simplify();
+	}
+	
 	public MacroCell simplify() {
 		if(n < 2)
 			return this;
+		
+		if(off)
+			return empty(1);
+		
 		for(int i=0; i<4; i++) {
-			if(!part(2, i, 0).isEmpty() || !part(2, i, 3).isEmpty() || !part(2, (i/2)*3, i%2+1).isEmpty())
+			if(!part(2, i, 0).off || !part(2, i, 3).off || !part(2, (i/2)*3, i%2+1).off)
 				return this;
 		}
 		return get(part(2, 1, 1), part(2, 1, 2), part(2, 2,1), part(2, 2, 2)).simplify();
 	}
 	
 	public MacroCell borderize() {
+		if(off)
+			return empty(n+1);
 		MacroCell e = empty(n-1);
 		return get(get(e,e,e,quad[0]), get(e,e,quad[1],e), get(e,quad[2],e,e), get(quad[3],e,e,e));
 	}
 	
-	public boolean[][] toTab() {
-		int size = (int) Math.pow(2, n);
-		boolean[][] t = new boolean[size][size];
-		
-		for(int i=0; i<4; i++) {
-			boolean[][] tmp = quad[i].toTab();
-			int baseI = (i/2)*(size/2), baseJ = (i%2)*(size/2);
-			for(int j=0; j<size/2; j++)
-				for(int k=0; k<size/2; k++)
-					t[baseI+j][baseJ+k] = tmp[j][k];
-		}
-		
-		return t;
+	public void fillTab(boolean[][] tab, int i, int j) {
+		if(off)
+			for(int k=0; k<size; k++)
+				for(int l=0; l<size; l++)
+					tab[i+k][j+l] = false;
+		else
+			for(int k=0; k<4; k++)
+				quad[k].fillTab(tab, i+(k/2)*(size/2), j+(k%2)*(size/2));
 	}
 	
 }
