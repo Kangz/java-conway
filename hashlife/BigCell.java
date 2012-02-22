@@ -17,17 +17,17 @@ public class BigCell extends MacroCell {
 	private MacroCell result[];
 	
 	private BigCell(MacroCell ... quad) {
-		super(quad[0].n+1, quad[0].off && quad[1].off && quad[2].off && quad[3].off);
+		super(quad[0].dim+1, quad[0].off && quad[1].off && quad[2].off && quad[3].off);
 		for(int i=0; i<4; i++)
 			this.quad[i] = quad[i];
-		this.result = new MacroCell[this.n-1];
+		this.result = new MacroCell[this.dim-1];
 		
 		if(this.off)
-			Arrays.fill(this.result, empty(this.n-1));
+			Arrays.fill(this.result, empty(this.dim-1));
 	}
 	
 	static public MacroCell get(MacroCell ... quad) {
-		assert(quad.length == 4 && quad[0].n == quad[1].n && quad[1].n == quad[2].n && quad[2].n == quad[3].n);
+		assert(quad.length == 4 && quad[0].dim == quad[1].dim && quad[1].dim == quad[2].dim && quad[2].dim == quad[3].dim);
 		MacroCell m = new BigCell(quad);
 	
 		if(built.containsKey(m))
@@ -50,7 +50,7 @@ public class BigCell extends MacroCell {
 	}
 	
 	public MacroCell part(int depth, int i, int j) {
-		if(depth > n)
+		if(depth > dim)
 			throw new RuntimeException("Too large depth for this MacroCell");
 		if(depth == 0)
 			return this;
@@ -61,10 +61,10 @@ public class BigCell extends MacroCell {
 	public MacroCell oneStep() {
 		
 		if(off)
-			return empty(n-1);
+			return empty(dim-1);
 
 		MacroCell resQuad[] = new MacroCell[4];
-		if(n == 2) {
+		if(dim == 2) {
 			for(int i=0; i<4; i++) {
 				int baseI = 1+i/2, baseJ = 1+i%2;
 				int count = 0;
@@ -95,8 +95,8 @@ public class BigCell extends MacroCell {
 	}
 	
 	public MacroCell result(int s) {
-		if(s > n-2)
-			throw new RuntimeException("Cannot return the result at time " + s + " of a " + n + " cell");
+		if(s > dim-2)
+			throw new RuntimeException("Cannot return the result at time " + s + " of a " + dim + " cell");
 		
 		if(result[s] != null)
 			return result[s];
@@ -139,7 +139,7 @@ public class BigCell extends MacroCell {
 		}
 		do {
 			r = r.borderize();
-		} while(r.n - 2 < s);
+		} while(r.dim - 2 < s);
 		while(n > 0) {
 			if((t&n) != 0)
 				r = r.result(s).borderize();
@@ -151,7 +151,7 @@ public class BigCell extends MacroCell {
 	}
 	
 	public MacroCell simplify() {
-		if(n < 2)
+		if(dim < 2)
 			return this;
 		
 		if(off)
@@ -166,8 +166,8 @@ public class BigCell extends MacroCell {
 	
 	public MacroCell borderize() {
 		if(off)
-			return empty(n+1);
-		MacroCell e = empty(n-1);
+			return empty(dim+1);
+		MacroCell e = empty(dim-1);
 		return get(get(e,e,e,quad[0]), get(e,e,quad[1],e), get(e,quad[2],e,e), get(quad[3],e,e,e));
 	}
 	
