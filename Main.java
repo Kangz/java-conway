@@ -1,3 +1,4 @@
+import ui.Window;
 import hashlife.*;
 
 
@@ -7,6 +8,11 @@ public class Main {
 	final static BooleanCell t = BooleanCell.True;
 	
 	static public void main(String[] args) {
+		Window w = new Window();
+		w.setVisible(true);
+	}
+	
+	static void testHashlife() {
 		
 		MacroCell a = get(f, t, f, f);
 		MacroCell b = get(f, f, t, f);
@@ -20,7 +26,6 @@ public class Main {
 		System.out.println(planeur.simplify().niceString());
 		System.out.println(r.niceString());
 		System.out.println(r.evolve(4).niceString());
-		
 	}
 	
 	static MacroCell empty(int n) {
