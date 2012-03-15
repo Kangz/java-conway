@@ -1,6 +1,6 @@
 import ui.Window;
 import hashlife.*;
-
+import util.RLE;
 
 public class Main {
 	
@@ -10,6 +10,16 @@ public class Main {
 	static public void main(String[] args) {
 		Window w = new Window();
 		w.setVisible(true);
+		
+		testRLE();
+	}
+	
+	static void testRLE() {
+		
+		boolean[][] t = RLE.read("media/glider.rle");
+		
+		System.out.println(MacroCell.niceStringFromTab(t));
+		
 	}
 	
 	static void testHashlife() {

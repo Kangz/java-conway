@@ -52,8 +52,7 @@ abstract public class MacroCell {
 		return tab;
 	}
 	
-	final public String niceString() {
-		boolean[][] t = toTab();
+	static public String niceStringFromTab(boolean[][] t) {
 		String s = "";
 		
 		for(int i=0; i<t.length; i++) {
@@ -62,7 +61,11 @@ abstract public class MacroCell {
 			s += '\n';
 		}
 		
-		return s;
+		return s;		
+	}
+	
+	final public String niceString() {
+		return niceStringFromTab(toTab());
 	}
 	
 	/**
