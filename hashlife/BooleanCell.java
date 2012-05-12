@@ -45,5 +45,9 @@ public class BooleanCell extends MacroCell {
 	public void fillTab(boolean[][] tab, int i, int j) {
 		tab[i][j] = v;
 	}
+
+	public int getDensity() {
+		return v ? 255 : 0;
+	}
 	
 }

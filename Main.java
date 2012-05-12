@@ -1,3 +1,4 @@
+import ui.DrawPanel;
 import ui.Window;
 import hashlife.*;
 import util.RLE;
@@ -11,7 +12,9 @@ public class Main {
 		Window w = new Window();
 		w.setVisible(true);
 		
-		testRLE();
+		testHashlife();
+		testDrawer(w.getDrawPanel());
+		//testRLE();
 	}
 	
 	static void testRLE() {
@@ -23,7 +26,6 @@ public class Main {
 	}
 	
 	static void testHashlife() {
-		
 		MacroCell a = get(f, t, f, f);
 		MacroCell b = get(f, f, t, f);
 		MacroCell c = get(t, t, f, f);
@@ -36,6 +38,24 @@ public class Main {
 		System.out.println(planeur.simplify().niceString());
 		System.out.println(r.niceString());
 		System.out.println(r.evolve(4).niceString());
+	}
+	
+	static void testDrawer(DrawPanel drawer){
+		MacroCell a = get(f, t, f, f);
+		MacroCell b = get(f, f, t, f);
+		MacroCell c = get(t, t, f, f);
+		MacroCell d = get(t, f, f, f);
+		MacroCell planeur = get(a,b,c,d);
+		
+		while(true){
+			drawer.setCell(planeur);
+			drawer.reDraw();
+			planeur = planeur.evolve(4);
+			System.out.println("Draw!!");
+			for(int i=0; i<1000000000; i++){
+				
+			}
+		}
 	}
 	
 	static MacroCell empty(int n) {

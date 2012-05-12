@@ -23,4 +23,8 @@ public class Panel extends JPanel {
 		add(drawPanel, BorderLayout.CENTER);
 		
 	}
+	
+	public DrawPanel getDrawPanel(){
+		return drawPanel;
+	}
 }

@@ -102,4 +102,18 @@ abstract public class MacroCell {
 	 * @return the borderized MacroCell
 	 */
 	abstract public MacroCell borderize();
+	
+	/**
+	 * 
+	 * 
+	 */
+	abstract public int getDensity();
+
+	public int getDim(){
+		return dim;
+	}
+
+	public int getSize(){
+		return size;
+	}
 }

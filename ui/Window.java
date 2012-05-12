@@ -19,4 +19,8 @@ public class Window extends JFrame {
 		getContentPane().add(panel);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	
+	public DrawPanel getDrawPanel(){
+		return panel.getDrawPanel();
+	}
 }

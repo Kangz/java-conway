@@ -180,5 +180,9 @@ public class BigCell extends MacroCell {
 			for(int k=0; k<4; k++)
 				quad[k].fillTab(tab, i+(k/2)*(size/2), j+(k%2)*(size/2));
 	}
+
+	public int getDensity() {
+		return 0; //TODO
+	}
 	
 }
