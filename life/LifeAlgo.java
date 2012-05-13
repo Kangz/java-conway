@@ -6,7 +6,7 @@ public interface LifeAlgo {
 	
 	public LifeDrawer getDrawer();
 	
-	public void loadFromArray(int[][] a);
+	public void loadFromArray(int[][] array);
 	public int[][] saveToArray();
 	
 	public int getCellAt(int x, int y);
