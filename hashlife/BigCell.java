@@ -14,12 +14,16 @@ public class BigCell extends MacroCell {
 	 *  +---+---+
 	 */	
 	final protected MacroCell quad[] = new MacroCell[4];
+	private int density;
 	private MacroCell result[];
 	
 	private BigCell(MacroCell ... quad) {
 		super(quad[0].dim+1, quad[0].off && quad[1].off && quad[2].off && quad[3].off);
-		for(int i=0; i<4; i++)
+		for(int i=0; i<4; i++) {
 			this.quad[i] = quad[i];
+			this.density += quad[i].getDensity();
+		}
+		this.density /= 4;
 		this.result = new MacroCell[this.dim-1];
 		
 		if(this.off)
@@ -57,7 +61,7 @@ public class BigCell extends MacroCell {
 		int factor = ((int) Math.pow(2, depth))/2;
 		return quad[2*(i/factor) + j/factor].part(depth-1, i%factor, j%factor);
 	}
-//test	
+
 	public MacroCell oneStep() {
 		
 		if(off)
@@ -177,7 +181,7 @@ public class BigCell extends MacroCell {
 	}
 
 	public int getDensity() {
-		return 0; //TODO
+		return this.density;
 	}
 	
 }
