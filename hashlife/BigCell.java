@@ -132,21 +132,16 @@ public class BigCell extends MacroCell {
 	public MacroCell evolve(int t) {
 		MacroCell r = this.simplify();
 		
-		int n=1, s=0;
-		while(n < t) {
-			n *= 2;
-			s += 1;
-		}
-		do {
+		int s = 32 - Integer.numberOfLeadingZeros(t);
+		int n = 1<<s;
+		for(int i = 0; i<=s; i++)
 			r = r.borderize();
-		} while(r.dim - 2 < s);
 		while(n > 0) {
 			if((t&n) != 0)
 				r = r.result(s).borderize();
 			n /= 2;
-			s -= 1;
+			s--;
 		}
-		
 		return r.simplify();
 	}
 	
