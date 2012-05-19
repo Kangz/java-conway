@@ -9,7 +9,7 @@ public class NaiveAlgo implements LifeAlgo {
 	NaiveState s;
 	
 	@Override
-	public void loadState(LifeState state) {
+	public void setState(LifeState state) {
 		if (state instanceof NaiveState) {
 			s = (NaiveState) state;
 		} else {
@@ -18,7 +18,7 @@ public class NaiveAlgo implements LifeAlgo {
 	}
 
 	@Override
-	public LifeState saveState() {
+	public LifeState getState() {
 		return s.copy();
 	}
 

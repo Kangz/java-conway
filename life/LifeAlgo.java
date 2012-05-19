@@ -1,8 +1,8 @@
 package life;
 
 public interface LifeAlgo {
-	public void loadState(LifeState state);
-	public LifeState saveState();
+	public void setState(LifeState state);
+	public LifeState getState();
 	
 	public LifeDrawer getDrawer();
 	
