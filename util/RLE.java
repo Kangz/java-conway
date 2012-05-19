@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class RLE {
 	
-	static public boolean[][] read(String file) {
+	static public int[][] read(String file) {
 		Scanner in;
 		try {
 			in = new Scanner(new File(file));
@@ -32,7 +32,7 @@ public class RLE {
 		int m = Integer.parseInt(matcher.group(2));
 		String rule = matcher.group(3);
 		
-		boolean[][] t = new boolean[m][n];
+		int[][] t = new int[m][n];
 		int buffer = 0;
 		int x=0, y=0;
 		
@@ -44,7 +44,7 @@ public class RLE {
 					buffer = 10*buffer + (int) (c - '0');
 				}
 				else if(c == 'o') {
-					Arrays.fill(t[y], x, Math.min(n, x+Math.max(1, buffer)), true);
+					Arrays.fill(t[y], x, Math.min(n, x+Math.max(1, buffer)), 1);
 					x += buffer;
 					buffer = 0;
 				}
