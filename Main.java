@@ -4,6 +4,7 @@ import life.LifeAlgo;
 import life.LifeDrawer;
 import life.hashlife.*;
 import util.RLE;
+import util.RLEtmp;
 
 public class Main {
 	
@@ -21,9 +22,17 @@ public class Main {
 	
 	static void testRLE() {
 		
-		int[][] t = RLE.read("media/glider.rle");
+		int[][] t = RLE.read("media/puffer.rle");
+		RLEtmp r = new RLEtmp("media/puffer.rle");
+		int[][] t2 = r.cells;
 		
-		System.out.println(MacroCell.niceStringFromTab(t));
+		for(int i=0; i<t.length; i++)
+			for(int j=0; j<t[i].length; j++)
+				if(t[i][j] != t2[j][i])
+					System.out.println(i + " - " + j);
+		
+		//System.out.println(MacroCell.niceStringFromTab(t));
+		//System.out.println(MacroCell.niceStringFromTab(t2));
 		
 	}
 	
@@ -44,19 +53,27 @@ public class Main {
 	static void testDrawer(DrawPanel drawer) {
 		
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/ticker.rle"));
+		RLEtmp t = new RLEtmp("media/puffer.rle");
+		a.loadFromArray(t.cells);
+		//a.loadFromArray(RLE.read("media/puffer.rle"));
 		
 		drawer.setLifeAlgo(a);
-		
+
+		long time;
 		while(true){
+			//time =System.currentTimeMillis();
 			drawer.reDraw();
-			a.evolve(32);
-			try {
+			//System.out.println("Draw: " + (System.currentTimeMillis() - time));
+			//time =System.currentTimeMillis();
+			a.evolve(1);
+			//System.out.println("Evolve: " + (System.currentTimeMillis() - time));
+			
+			/*try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 }

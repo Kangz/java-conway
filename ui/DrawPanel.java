@@ -1,13 +1,9 @@
 package ui;
 
-import hashlife.MacroCell;
-
 import javax.swing.*;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import life.LifeAlgo;
 
@@ -15,6 +11,11 @@ import life.LifeAlgo;
 public class DrawPanel extends JPanel {
 	
 	private LifeAlgo currentAlgo = null;
+	private BufferedImage b = null;
+	
+	public DrawPanel() {
+		
+	}
 	
 	public void setLifeAlgo(LifeAlgo a){
 		currentAlgo = a;
@@ -26,7 +27,9 @@ public class DrawPanel extends JPanel {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		currentAlgo.getDrawer().draw(0, 0, getWidth(), getHeight(), 1, currentAlgo.getState(), g);
+		if(b == null)
+			b = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+		currentAlgo.getDrawer().draw(0, 0, 2, currentAlgo.getState(), b);
+		g.drawImage(b, 0, 0, null);
 	}
 }
