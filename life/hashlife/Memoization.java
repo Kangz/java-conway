@@ -43,4 +43,29 @@ public class Memoization {
 		return empty.get(dim);
 	}
 	
+	static public MacroCell fromTab(int[][] tab) {
+		if(tab == null || tab.length == 0)
+			return empty(1);
+		int h = tab.length, w = tab[0].length, dim;
+		if(h < w)
+			dim = 32 - Integer.numberOfLeadingZeros(w);
+		else
+			dim = 32 - Integer.numberOfLeadingZeros(h);
+		if(dim < 1)
+			dim = 1;
+		return fromTab(tab, 0, 0, dim);
+	}
+	
+	static public MacroCell fromTab(int[][] tab, int i, int j, int dim) {
+		if(dim == 0) {
+			if(i >= tab.length || j >= tab[i].length || tab[i][j] == 0)
+				return BooleanCell.off;
+			return BooleanCell.on;
+		}
+		int offset = 1 << (dim-1);
+		return get(	fromTab(tab, i, j, dim-1),
+					fromTab(tab, i, j + offset, dim-1),
+					fromTab(tab, i + offset, j, dim-1),
+					fromTab(tab, i + offset, j + offset, dim-1));
+	}
 }

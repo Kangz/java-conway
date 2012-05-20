@@ -26,15 +26,19 @@ public class Main {
 	}
 	
 	static void testHashlife() {
-		MacroCell a = get(f, t, f, f);
-		MacroCell b = get(f, f, t, f);
-		MacroCell c = get(t, t, f, f);
-		MacroCell d = get(t, f, f, f);
-		MacroCell planeur = Memoization.get(a, b, c, d);
+		int[][] t = RLE.read("media/puffer.rle");
+
+		HashLifeState s = new HashLifeState(t);
 		
-		HashLifeState s = new HashLifeState(planeur);
+		long time = System.currentTimeMillis();
+		s.evolve(1);
+		s.evolve(1);
+		s.evolve(1);
+		s.evolve(1);
+		s.evolve(1);
+		System.out.println(System.currentTimeMillis() - time);
 		
-		for(int i=0; i<10; i++) {
+		/*for(int i=0; i<10; i++) {
 			s.evolve(1);
 			System.out.println(s.state.niceString());
 		}

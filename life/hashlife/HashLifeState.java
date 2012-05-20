@@ -7,13 +7,12 @@ public class HashLifeState implements LifeState {
 
 	public MacroCell state;
 	
-	public HashLifeState(MacroCell state) {
+	HashLifeState(MacroCell state) {
 		this.state = state.simplify();
 	}
 	
-	//TODO
-	HashLifeState(int[][] array) {
-		this.state = null;
+	public HashLifeState(int[][] array) {
+		this.state = Memoization.fromTab(array);
 	}
 	
 	HashLifeState(HashLifeState other) {
@@ -34,9 +33,8 @@ public class HashLifeState implements LifeState {
 		return;
 	}
 	
-	//TODO
 	int[][] toArray() {
-		return null;
+		return state.toTab();
 	}
 	
 	public void evolve(int steps) {
