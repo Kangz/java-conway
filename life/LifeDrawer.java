@@ -1,7 +1,7 @@
 package life;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 public interface LifeDrawer {
-	void draw(int x, int y, int zoom, LifeState state, Graphics2D g);
+	void draw(int x, int y, int w, int h, int zoom, LifeState state, Graphics g);
 }

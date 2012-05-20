@@ -13,7 +13,7 @@ public class HashLifeAlgo implements LifeAlgo {
 		if (state instanceof HashLifeState) {
 			s = (HashLifeState) state;
 		} else {
-			throw new RuntimeException("NaiveLife.loadState needs a NaiveState");
+			throw new RuntimeException("NaiveLife.loadState needs a HashLifeState");
 		}
 	}
 

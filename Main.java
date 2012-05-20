@@ -1,5 +1,7 @@
 import ui.DrawPanel;
 import ui.Window;
+import life.LifeAlgo;
+import life.LifeDrawer;
 import life.hashlife.*;
 import util.RLE;
 
@@ -9,11 +11,11 @@ public class Main {
 	final static BooleanCell t = BooleanCell.on;
 	
 	static public void main(String[] args) {
-		//Window w = new Window();
-		//w.setVisible(true);
+		Window w = new Window();
+		w.setVisible(true);
 		
-		testHashlife();
-		//testDrawer(w.getDrawPanel());
+		//testHashlife();
+		testDrawer(w.getDrawPanel());
 		//testRLE();
 	}
 	
@@ -26,7 +28,7 @@ public class Main {
 	}
 	
 	static void testHashlife() {
-		int[][] t = RLE.read("media/puffer.rle");
+		int[][] t = RLE.read("media/ticker.rle");
 
 		HashLifeState s = new HashLifeState(t);
 		
@@ -37,37 +39,24 @@ public class Main {
 		s.evolve(1);
 		s.evolve(1);
 		System.out.println(System.currentTimeMillis() - time);
-		
-		/*for(int i=0; i<10; i++) {
-			s.evolve(1);
-			System.out.println(s.state.niceString());
-		}
 	}
 	
-	static void testDrawer(DrawPanel drawer){
-		/*MacroCell a = get(f, t, f, f);
-		MacroCell b = get(f, f, t, f);
-		MacroCell c = get(t, t, f, f);
-		MacroCell d = get(t, f, f, f);
-		MacroCell planeur = get(a,b,c,d);
+	static void testDrawer(DrawPanel drawer) {
+		
+		LifeAlgo a = new HashLifeAlgo();
+		a.loadFromArray(RLE.read("media/ticker.rle"));
+		
+		drawer.setLifeAlgo(a);
 		
 		while(true){
-			drawer.setCell(planeur);
 			drawer.reDraw();
-			planeur = planeur.evolve(4);
-			System.out.println("Draw!!");
-			for(int i=0; i<1000000000; i++){
-				
+			a.evolve(32);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}*/
+		}
 	}
-	
-	static MacroCell empty(int n) {
-		return Memoization.empty(n);
-	}
-	
-	static MacroCell get(MacroCell m0, MacroCell m1, MacroCell m2, MacroCell m3) {
-		return Memoization.get(m0, m1, m2, m3);
-	}
-
 }
