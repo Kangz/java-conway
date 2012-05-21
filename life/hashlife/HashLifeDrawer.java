@@ -2,7 +2,6 @@ package life.hashlife;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import life.LifeDrawer;
@@ -18,6 +17,10 @@ public class HashLifeDrawer implements LifeDrawer {
 			realSize >>= -zoom;
 		else
 			realSize <<= zoom;
+		
+		//x -= realSize/2;
+		//y -= realSize/2;
+		
 		recDraw(b, b.getGraphics(), x, y, zoom, cell);
 		
 	}
@@ -35,7 +38,7 @@ public class HashLifeDrawer implements LifeDrawer {
 		if(x + realSize < 0 || x >= w || y + realSize < 0 || y >= h){
 			return;
 		}
-		
+
 		if(cell.off) {
 			g.setColor(Color.black);
 			g.fillRect(x, y, realSize, realSize);
@@ -48,7 +51,9 @@ public class HashLifeDrawer implements LifeDrawer {
 			g.setColor(new Color(color, color, color));
 			g.fillRect(x, y, 1<<zoom, 1<<zoom);
 			return;
-		} else if(cell.dim == -zoom) {
+		}
+		
+		if(cell.dim == -zoom) {
 			int rgb = (new Color(cell.density, cell.density, cell.density).getRGB());
 			b.setRGB(x, y, rgb);
 			return;
@@ -59,7 +64,6 @@ public class HashLifeDrawer implements LifeDrawer {
 		recDraw(b, g, x + offset, y         , zoom, cell.quad(1));
 		recDraw(b, g, x         , y + offset, zoom, cell.quad(2));
 		recDraw(b, g, x + offset, y + offset, zoom, cell.quad(3));
+
 	}
-
-
 }

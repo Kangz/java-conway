@@ -1,7 +1,6 @@
 import ui.DrawPanel;
 import ui.Window;
 import life.LifeAlgo;
-import life.LifeDrawer;
 import life.hashlife.*;
 import util.RLE;
 
@@ -44,27 +43,38 @@ public class Main {
 	static void testDrawer(DrawPanel drawer) {
 		
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/ticker.rle"));
+		a.loadFromArray(RLE.read("media/puffer.rle"));
 		
 		drawer.setLifeAlgo(a);
 
+		int step = 0;
 		long time;
 		while(true){
-			time =System.currentTimeMillis();
-			drawer.reDraw();
-			if(System.currentTimeMillis() - time > 50)
-			System.out.println("Draw: " + (System.currentTimeMillis() - time));
-			time =System.currentTimeMillis();
-			a.evolve(4);
-			if(System.currentTimeMillis() - time > 50)
-			System.out.println("Evolve: " + (System.currentTimeMillis() - time));
+			time = System.currentTimeMillis();
+			drawer.repaint();
+			if(System.currentTimeMillis() - time > 50){
+				//System.out.println("Draw " + step + " : " + (System.currentTimeMillis() - time));
+			}
+		
 			
-			/*try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			while(drawer.getDrawer().opLength() > 15){
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			
+			time = System.currentTimeMillis();
+			a.evolve(8);
+			if(System.currentTimeMillis() - time > 50){
+				//System.out.println("Evolve " + step + " : " + (System.currentTimeMillis() - time));
+			}
+			
+			drawer.getDrawer().addOp(a.getDrawer(), a.getState());
+			
+			step ++;
 		}
 	}
 }
