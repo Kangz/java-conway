@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.swing.JComponent;
+
 import life.LifeDrawer;
 import life.LifeState;
 
@@ -20,6 +22,7 @@ public class DrawerThread implements Runnable {
 
 	private boolean running = true;
 	private int interval = 33;
+	private JComponent component;
 	
 	private Object transformLock = new Object();
 	private int x = 0;
@@ -36,7 +39,13 @@ public class DrawerThread implements Runnable {
 	private BufferedImage imageB = null;
 	public Object imageLock = new Object();
 	
+	private boolean animFrame = false;
+	
 	private Queue<DrawState> pendingStates = new LinkedList<DrawState>();
+	
+	public DrawerThread(JComponent container) {
+		this.component = container;
+	}
 	
 	public void stop() {
 		running = false;
@@ -80,44 +89,66 @@ public class DrawerThread implements Runnable {
 		imageA = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
 		imageB = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
 	}
+
+	private void synchronizeDims(){
+		int w, h;
+		synchronized(dimLock) {
+			w = width;
+			h = height;
+		}
+		
+		if (w != storedWidth || h != storedHeight) {
+			storedWidth = w;
+			storedHeight = h;
+			createImageBuffers();			
+		}
+	}
 	
 	public void run() {
 		createImageBuffers();
+
+		long target_time = System.currentTimeMillis() + interval;
+		DrawState lastd = null;
+		boolean isAnimFrame = false;
 		
 		while (running) {
-			long timea = System.currentTimeMillis();
+			if(! isAnimFrame) {
+				target_time = System.currentTimeMillis() + interval;
+			}
 
-			int w, h;
-			synchronized(dimLock) {
-				w = width;
-				h = height;
-			}
-			
-			if (w != storedWidth || h != storedHeight) {
-				storedWidth = w;
-				storedHeight = h;
-				createImageBuffers();			
-			}
+			synchronizeDims();
 
 			DrawState d = null;
-			synchronized(pendingStates){
-				d = pendingStates.poll();
+			if(! isAnimFrame) {
+				synchronized(pendingStates){
+					d = pendingStates.poll();
+				}
 			}
 			
-			if (d != null){
-				draw(d);
-				trySwap();
+			DrawState toDraw = isAnimFrame ? lastd : d;
+			
+			if (toDraw != null){
+				draw(toDraw);
+				swap();
+				component.repaint();
+				lastd = toDraw;
 			}
-			
-			long timeb = System.currentTimeMillis();
-			
+
 			try {
 				synchronized(this){
-					wait(Math.max(interval - timeb + timea, 1));
+					wait(Math.max(target_time - System.currentTimeMillis(), 1));
 				}
 			} catch (InterruptedException e) {
+				if (animFrame) {
+					isAnimFrame = true;
+				}
 			}
+			animFrame = false;
 		}
+	}
+	
+	public void requestAnimFrame() {
+		animFrame = true;
 	}
 	
 	public void setTransform(int x, int y, int zoom){
@@ -138,7 +169,7 @@ public class DrawerThread implements Runnable {
 		return imageB;
 	}
 	
-	private void trySwap() {
+	private void swap() {
 		synchronized(imageLock){
 			BufferedImage temp = imageB;
 			imageB = imageA;
