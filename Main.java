@@ -61,12 +61,14 @@ public class Main {
 
 		long time;
 		while(true){
-			//time =System.currentTimeMillis();
+			time =System.currentTimeMillis();
 			drawer.reDraw();
-			//System.out.println("Draw: " + (System.currentTimeMillis() - time));
-			//time =System.currentTimeMillis();
+			if(System.currentTimeMillis() - time > 50)
+			System.out.println("Draw: " + (System.currentTimeMillis() - time));
+			time =System.currentTimeMillis();
 			a.evolve(1);
-			//System.out.println("Evolve: " + (System.currentTimeMillis() - time));
+			if(System.currentTimeMillis() - time > 50)
+			System.out.println("Evolve: " + (System.currentTimeMillis() - time));
 			
 			/*try {
 				Thread.sleep(100);

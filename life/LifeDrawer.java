@@ -3,7 +3,6 @@ package life;
 import java.awt.image.BufferedImage;
 
 public interface LifeDrawer {
-
 	/**
 	 * 
 	 * @param x x-coordinate of the origin of the drawing
