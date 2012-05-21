@@ -18,11 +18,14 @@ public class HashLifeDrawer implements LifeDrawer {
 		else
 			realSize <<= zoom;
 		
-		//x -= realSize/2;
-		//y -= realSize/2;
-		
-		recDraw(b, b.getGraphics(), x, y, zoom, cell);
-		
+		x -= realSize/2;
+		y -= realSize/2;
+
+		Graphics g = b.getGraphics();
+		g.setColor(Color.black);
+		g.fillRect(0, 0, b.getWidth(), b.getHeight());
+		System.out.println(cell.dim);
+		recDraw(b, g, x, y, zoom, cell);
 	}
 	
 	private void recDraw(BufferedImage b, Graphics g, int x, int y, int zoom, MacroCell cell) {
@@ -35,26 +38,23 @@ public class HashLifeDrawer implements LifeDrawer {
 			realSize <<= zoom;
 		
 		int w = b.getWidth(), h = b.getHeight();
-		if(x + realSize < 0 || x >= w || y + realSize < 0 || y >= h){
+		if(x + realSize <= 0 || x >= w || y + realSize <= 0 || y >= h){
 			return;
 		}
 
 		if(cell.off) {
-			g.setColor(Color.black);
-			g.fillRect(x, y, realSize, realSize);
 			return;
 		}
 		
 		if(cell.dim == 0){
-			//System.out.println("Draw x: " + x + ", y: " + y);
-			int color = cell.density;
-			g.setColor(new Color(color, color, color));
+			g.setColor(Color.white);
 			g.fillRect(x, y, 1<<zoom, 1<<zoom);
 			return;
 		}
 		
 		if(cell.dim == -zoom) {
-			int rgb = (new Color(cell.density, cell.density, cell.density).getRGB());
+			int color = cell.density;
+			int rgb = (new Color(color, color, color).getRGB());
 			b.setRGB(x, y, rgb);
 			return;
 		}
