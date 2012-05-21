@@ -43,19 +43,13 @@ public class Main {
 	static void testDrawer(DrawPanel drawer) {
 		
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/puffer.rle"));
+		a.loadFromArray(RLE.read("media/ticker.rle"));
 		
 		drawer.setLifeAlgo(a);
 
 		int step = 0;
 		long time;
 		while(true){
-			time = System.currentTimeMillis();
-			drawer.repaint();
-			if(System.currentTimeMillis() - time > 50){
-				//System.out.println("Draw " + step + " : " + (System.currentTimeMillis() - time));
-			}
-		
 			
 			while(drawer.getDrawer().opLength() > 15){
 				try {
@@ -64,12 +58,13 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
-
 			
 			time = System.currentTimeMillis();
 			a.evolve(8);
-			if(System.currentTimeMillis() - time > 50){
-				//System.out.println("Evolve " + step + " : " + (System.currentTimeMillis() - time));
+			
+			
+			if(System.currentTimeMillis() - time > 5){
+				System.out.println("Evolve " + step + " : " + (System.currentTimeMillis() - time));
 			}
 			
 			drawer.getDrawer().addOp(a.getDrawer(), a.getState());
