@@ -45,7 +45,7 @@ public class RLE {
 				}
 				else if(c == 'o') {
 					Arrays.fill(t[y], x, Math.min(n, x+Math.max(1, buffer)), 1);
-					x += buffer;
+					x += Math.max(1, buffer);
 					buffer = 0;
 				}
 				else if(c == 'b') {

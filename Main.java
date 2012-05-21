@@ -4,7 +4,6 @@ import life.LifeAlgo;
 import life.LifeDrawer;
 import life.hashlife.*;
 import util.RLE;
-import util.RLEtmp;
 
 public class Main {
 	
@@ -23,16 +22,8 @@ public class Main {
 	static void testRLE() {
 		
 		int[][] t = RLE.read("media/puffer.rle");
-		RLEtmp r = new RLEtmp("media/puffer.rle");
-		int[][] t2 = r.cells;
 		
-		for(int i=0; i<t.length; i++)
-			for(int j=0; j<t[i].length; j++)
-				if(t[i][j] != t2[j][i])
-					System.out.println(i + " - " + j);
-		
-		//System.out.println(MacroCell.niceStringFromTab(t));
-		//System.out.println(MacroCell.niceStringFromTab(t2));
+		System.out.println(MacroCell.niceStringFromTab(t));
 		
 	}
 	
@@ -53,9 +44,7 @@ public class Main {
 	static void testDrawer(DrawPanel drawer) {
 		
 		LifeAlgo a = new HashLifeAlgo();
-		RLEtmp t = new RLEtmp("media/puffer.rle");
-		a.loadFromArray(t.cells);
-		//a.loadFromArray(RLE.read("media/puffer.rle"));
+		a.loadFromArray(RLE.read("media/ticker.rle"));
 		
 		drawer.setLifeAlgo(a);
 
@@ -66,7 +55,7 @@ public class Main {
 			if(System.currentTimeMillis() - time > 50)
 			System.out.println("Draw: " + (System.currentTimeMillis() - time));
 			time =System.currentTimeMillis();
-			a.evolve(1);
+			a.evolve(4);
 			if(System.currentTimeMillis() - time > 50)
 			System.out.println("Evolve: " + (System.currentTimeMillis() - time));
 			
