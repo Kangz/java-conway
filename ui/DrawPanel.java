@@ -13,6 +13,7 @@ public class DrawPanel extends JPanel {
 	private LifeAlgo currentAlgo = null;
 	private BufferedImage b = null;
 	
+	
 	public DrawPanel() {
 		
 	}
@@ -29,7 +30,9 @@ public class DrawPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		if(b == null)
 			b = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-		currentAlgo.getDrawer().draw(0, 0, 2, currentAlgo.getState(), b);
-		g.drawImage(b, 0, 0, null);
+		if (currentAlgo != null) {
+			currentAlgo.getDrawer().draw(0, 0, -1, currentAlgo.getState(), b);
+			g.drawImage(b, 0, 0, null);
+		}
 	}
 }

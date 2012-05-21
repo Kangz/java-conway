@@ -9,7 +9,7 @@ import life.LifeDrawer;
 import life.LifeState;
 
 public class HashLifeDrawer implements LifeDrawer {
-
+	
 	@Override
 	public void draw(int x, int y, int zoom, LifeState state, BufferedImage b) {
 		MacroCell cell = ((HashLifeState) state).state;
@@ -32,7 +32,7 @@ public class HashLifeDrawer implements LifeDrawer {
 			realSize <<= zoom;
 		
 		int w = b.getWidth(), h = b.getHeight();
-		if(x + realSize < 0 || x > w || y + realSize < 0 || y > h){
+		if(x + realSize < 0 || x >= w || y + realSize < 0 || y >= h){
 			return;
 		}
 		
@@ -49,8 +49,9 @@ public class HashLifeDrawer implements LifeDrawer {
 			g.fillRect(x, y, 1<<zoom, 1<<zoom);
 			return;
 		} else if(cell.dim == -zoom) {
-			int rgb = cell.density + cell.density<<8 + cell.density<<16;
+			int rgb = (new Color(cell.density, cell.density, cell.density).getRGB());
 			b.setRGB(x, y, rgb);
+			return;
 		}
 		
 		int offset = realSize/2;
