@@ -24,7 +24,6 @@ public class HashLifeDrawer implements LifeDrawer {
 		Graphics g = b.getGraphics();
 		g.setColor(Color.black);
 		g.fillRect(0, 0, b.getWidth(), b.getHeight());
-		System.out.println(cell.dim);
 		recDraw(b, g, x, y, zoom, cell);
 	}
 	
@@ -52,7 +51,7 @@ public class HashLifeDrawer implements LifeDrawer {
 			return;
 		}
 		
-		if(cell.dim == -zoom) {
+		if(cell.dim <= -zoom) {
 			int color = cell.density;
 			int rgb = (new Color(color, color, color).getRGB());
 			b.setRGB(x, y, rgb);

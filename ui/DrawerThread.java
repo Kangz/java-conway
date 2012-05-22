@@ -85,7 +85,6 @@ public class DrawerThread implements Runnable {
 	}
 	
 	private void createImageBuffers(){
-		System.out.println("Creating new Buffers");
 		imageA = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
 		imageB = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
 	}
