@@ -1,5 +1,7 @@
 import ui.DrawPanel;
+import ui.LifeControler;
 import ui.Window;
+import life.EvolveManager;
 import life.LifeAlgo;
 import life.hashlife.*;
 import util.RLE;
@@ -10,11 +12,9 @@ public class Main {
 	final static BooleanCell t = BooleanCell.on;
 	
 	static public void main(String[] args) {
-		Window w = new Window();
-		w.setVisible(true);
 		
 		//testHashlife();
-		testDrawer(w.getDrawPanel());
+		testApp();
 		//testRLE();
 	}
 	
@@ -40,15 +40,25 @@ public class Main {
 		System.out.println(System.currentTimeMillis() - time);
 	}
 	
-	static void testDrawer(DrawPanel drawer) {
-		
+	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
 		a.loadFromArray(RLE.read("media/ticker.rle"));
 		
-		drawer.setLifeAlgo(a);
+		Window w = new Window();
+		w.setVisible(true);
 
-		int step = 0;
-		long time;
+		DrawPanel drawer = w.getDrawPanel();
+		EvolveManager evolver = new EvolveManager();
+		LifeControler controler = new LifeControler(drawer, evolver);
+
+		evolver.setAlgo(a);
+		evolver.setControler(controler);
+		drawer.addListener(controler);
+		drawer.start();
+
+		evolver.run();
+		
+/*		
 		while(true){
 			
 			while(drawer.getDrawer().opLength() > 15){
@@ -59,17 +69,10 @@ public class Main {
 				}
 			}
 			
-			time = System.currentTimeMillis();
-			a.evolve(8);
-			
-			
-			if(System.currentTimeMillis() - time > 5){
-				System.out.println("Evolve " + step + " : " + (System.currentTimeMillis() - time));
-			}
+			a.evolve(32);
 			
 			drawer.getDrawer().addOp(a.getDrawer(), a.getState());
-			
-			step ++;
 		}
+		*/
 	}
 }

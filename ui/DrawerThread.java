@@ -46,6 +46,7 @@ public class DrawerThread implements Runnable {
 	private boolean showGrid = true;
 	
 	private boolean animFrame = false;
+	private boolean paused = false;
 	
 	private Queue<DrawState> pendingStates = new LinkedList<DrawState>();
 	
@@ -55,7 +56,9 @@ public class DrawerThread implements Runnable {
 	
 	public void stop() {
 		running = false;
-		notify();
+		synchronized(this){
+			notify();
+		}
 	}
 	
 	public void addOp(LifeDrawer d, LifeState s){
@@ -84,6 +87,10 @@ public class DrawerThread implements Runnable {
 			width = w;
 			height = h;
 		}
+	}
+	
+	public void setPaused(boolean p){
+		paused = p;
 	}
 	
 	public void setInterval(int i) {
@@ -115,38 +122,42 @@ public class DrawerThread implements Runnable {
 		long target_time = System.currentTimeMillis() + interval;
 		DrawState lastd = null;
 		boolean isAnimFrame = false;
-		
 		while (running) {
-			if(! isAnimFrame) {
-				target_time = System.currentTimeMillis() + interval;
-			}
-
-			synchronizeDims();
-
-			DrawState d = null;
-			if(! isAnimFrame) {
-				synchronized(pendingStates){
-					d = pendingStates.poll();
+			
+			//TODO skip if it is too close from another interval and an anim frame
+			
+			if(!paused || isAnimFrame){
+				if(! isAnimFrame) {
+					target_time = System.currentTimeMillis() + interval;
+				}
+	
+				synchronizeDims();
+	
+				DrawState d = null;
+				if(! isAnimFrame) {
+					synchronized(pendingStates){
+						d = pendingStates.poll();
+					}
+				}
+				
+				DrawState toDraw = isAnimFrame ? lastd : d;
+				
+				if (toDraw != null){
+					draw(toDraw);				
+					swap();
+					component.repaint();
+					lastd = toDraw;
 				}
 			}
-			
-			DrawState toDraw = isAnimFrame ? lastd : d;
-			
-			if (toDraw != null){
-				draw(toDraw);				
-				swap();
-				component.repaint();
-				lastd = toDraw;
-			}
-
+			isAnimFrame = false;
 			try {
 				synchronized(this){
 					wait(Math.max(target_time - System.currentTimeMillis(), 1));
 				}
 			} catch (InterruptedException e) {
-				if (animFrame) {
-					isAnimFrame = true;
-				}
+			}
+			if (animFrame) {
+				isAnimFrame = true;
 			}
 			animFrame = false;
 		}
@@ -154,6 +165,9 @@ public class DrawerThread implements Runnable {
 	
 	public void requestAnimFrame() {
 		animFrame = true;
+		synchronized(this){
+			notify();
+		}
 	}
 	
 	public void setTransform(int x, int y, int zoom){
