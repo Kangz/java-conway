@@ -24,6 +24,8 @@ public abstract class MacroCell {
 	
 	abstract public MacroCell quad(int i);
 	abstract public MacroCell result(int s);
+	abstract int getCell(int x, int y);
+	abstract MacroCell setCell(int x, int y, int state);
 
 	final public int[][] toTab() {
 		int[][] tab = new int[size][size];
@@ -31,7 +33,7 @@ public abstract class MacroCell {
 		return tab;
 	}
 	
-	static public String niceStringFromTab(int[][] t) {
+	final static public String niceStringFromTab(int[][] t) {
 		String s = "";
 		
 		for(int i=0; i<t.length; i++) {

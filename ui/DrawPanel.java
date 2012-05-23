@@ -19,7 +19,7 @@ public class DrawPanel extends JPanel {
 		dt = new DrawerThread(this);
 	}
 	
-	public void addListener(LifeControler listener){
+	public void addListener(LifeController listener){
 		addComponentListener(listener);
 		addMouseMotionListener(listener);
 		addMouseWheelListener(listener);

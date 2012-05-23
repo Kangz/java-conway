@@ -37,4 +37,16 @@ public class BooleanCell extends MacroCell {
 		throw new RuntimeException("Can't borderize a BooleanCell");
 	}
 
+	@Override
+	int getCell(int x, int y) {
+		return v;
+	}
+
+	@Override
+	MacroCell setCell(int x, int y, int state) {
+		if(state == 0)
+			return off;
+		return on;
+	}
+
 }

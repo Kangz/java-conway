@@ -14,7 +14,7 @@ import java.awt.event.MouseWheelListener;
 import life.EvolveManager;
 import life.LifeAlgo;
 
-public class LifeControler extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
+public class LifeController extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
 	
 	protected final DrawPanel drawer;
 	protected final EvolveManager evolver;
@@ -22,7 +22,7 @@ public class LifeControler extends ComponentAdapter implements MouseMotionListen
 	protected boolean paused = false;
 	protected int speed = 0;
 	
-	public LifeControler(DrawPanel p, EvolveManager evolver) {
+	public LifeController(DrawPanel p, EvolveManager evolver) {
 		this.drawer = p;
 		this.evolver = evolver;
 	}

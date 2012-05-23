@@ -1,18 +1,18 @@
 package life;
 
-import ui.LifeControler;
+import ui.LifeController;
 
 public class EvolveManager implements Runnable {
 
 	LifeAlgo algo;
-	LifeControler control;
+	LifeController control;
 	int speed = 1;
 	boolean running = false;
 	
 	public EvolveManager(){
 	}
 	
-	public void setControler(LifeControler c){
+	public void setController(LifeController c){
 		control = c;
 	}
 	

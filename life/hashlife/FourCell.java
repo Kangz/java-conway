@@ -19,5 +19,4 @@ public class FourCell extends ComposedCell {
 	public MacroCell result(int s) {
 		throw new RuntimeException("Can't compute the result of a FourCell");
 	}
-
 }

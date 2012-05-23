@@ -129,4 +129,21 @@ class ComposedCell extends MacroCell {
 				Memoization.get(quad[3],e,e,e));
 	}
 
+	@Override
+	int getCell(int x, int y) {
+		int halfSize = size/2;
+		int i = x/halfSize, j = y/halfSize;
+		return quad[2*i+j].getCell(x - i*halfSize, y - j*halfSize);
+	}
+
+	@Override
+	MacroCell setCell(int x, int y, int state) {
+		int halfSize = size/2;
+		int i = x/halfSize, j = y/halfSize;
+		
+		MacroCell[] tmp = Arrays.copyOf(quad, 4);
+		tmp[2*i+j] = tmp[2*i+j].setCell(x - i*halfSize, y - j*halfSize, state);
+		return Memoization.get(tmp);
+	}
+
 }

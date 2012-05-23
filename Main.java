@@ -1,5 +1,5 @@
 import ui.DrawPanel;
-import ui.LifeControler;
+import ui.LifeController;
 import ui.Window;
 import life.EvolveManager;
 import life.LifeAlgo;
@@ -49,11 +49,11 @@ public class Main {
 
 		DrawPanel drawer = w.getDrawPanel();
 		EvolveManager evolver = new EvolveManager();
-		LifeControler controler = new LifeControler(drawer, evolver);
+		LifeController controller = new LifeController(drawer, evolver);
 
 		evolver.setAlgo(a);
-		evolver.setControler(controler);
-		drawer.addListener(controler);
+		evolver.setController(controller);
+		drawer.addListener(controller);
 		drawer.start();
 
 		evolver.run();
