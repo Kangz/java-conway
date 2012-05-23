@@ -1,5 +1,9 @@
 package ui;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -24,7 +28,7 @@ public class DrawerThread implements Runnable {
 	private int interval = 33;
 	private JComponent component;
 	
-	private Object transformLock = new Object();
+	private Object paramsLock = new Object();
 	private int x = 0;
 	private int y = 0;
 	private int zoom = 0;
@@ -38,6 +42,8 @@ public class DrawerThread implements Runnable {
 	private BufferedImage imageA = null;
 	private BufferedImage imageB = null;
 	public Object imageLock = new Object();
+	
+	private boolean showGrid = true;
 	
 	private boolean animFrame = false;
 	
@@ -127,7 +133,7 @@ public class DrawerThread implements Runnable {
 			DrawState toDraw = isAnimFrame ? lastd : d;
 			
 			if (toDraw != null){
-				draw(toDraw);
+				draw(toDraw);				
 				swap();
 				component.repaint();
 				lastd = toDraw;
@@ -151,7 +157,7 @@ public class DrawerThread implements Runnable {
 	}
 	
 	public void setTransform(int x, int y, int zoom){
-		synchronized(transformLock){
+		synchronized(paramsLock){
 			this.x = x;
 			this.y = y;
 			this.zoom = zoom;
@@ -159,9 +165,77 @@ public class DrawerThread implements Runnable {
 	}
 	
 	private void draw(DrawState d) {
-		synchronized(transformLock){
-			d.drawer.draw(x, y, zoom, d.state, imageA);
+		int drawX, drawY, drawZoom;
+		boolean drawShowGrid;
+		synchronized(paramsLock){
+			drawX = this.x;
+			drawY = this.y;
+			drawZoom = this.zoom;
+			drawShowGrid = showGrid;
 		}
+		
+		drawBackground(imageA);
+		
+		if (drawShowGrid && zoom < 3) {
+			drawPartialGrid(drawX, drawY, imageA);
+		}
+
+		d.drawer.draw(drawX, drawY, drawZoom, d.state, imageA);
+
+		if (drawShowGrid && zoom >= 3) {
+			drawCellGrid(drawX, drawY, drawZoom, imageA);
+		}
+	}
+	
+	private void drawBackground(BufferedImage img) {
+		Graphics g = img.getGraphics();
+		g.setColor(Color.black);
+		g.fillRect(0, 0, img.getWidth(), img.getHeight());
+		
+	}
+	
+	final static Color DARKER_GRAY = new Color(20, 20, 20);
+	final static Color DARK_GRAY = new Color(30, 30, 30);
+	
+	private void drawCellGrid(int drawX, int drawY, int drawZoom, BufferedImage img) {
+		int size = 1 << zoom;
+		Graphics g = img.getGraphics();
+		g.setColor(DARK_GRAY);
+		int startX = drawX >= 0 ? drawX % size : (drawX % size) + size;
+		int startY = drawY >= 0 ? drawY % size : (drawY % size) + size;
+		
+		for(int x = startX; x < img.getWidth(); x += size){
+			g.drawLine(x, 0, x, img.getHeight());
+		}
+
+		for(int y = startY; y < img.getHeight(); y += size){
+			g.drawLine(0, y, img.getWidth(), y);
+		}
+	}
+
+	private void drawPartialGrid(int drawX, int drawY, BufferedImage img) {
+		final int size = 16;
+		int startX = drawX >= 0 ? drawX % size : (drawX % size) + size;
+		int startY = drawY >= 0 ? drawY % size : (drawY % size) + size;
+		Graphics2D g = (Graphics2D) img.getGraphics();
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+
+		g.setColor(DARKER_GRAY);
+		for(int x = startX - size/2; x < img.getWidth() + size/2; x += size){
+			g.drawLine(x, 0, x, img.getHeight());
+		}
+		for(int y = startY - size/2; y < img.getHeight() + size/2; y += size){
+			g.drawLine(0, y, img.getWidth(), y);
+		}
+		
+		g.setColor(DARK_GRAY);
+		for(int x = startX; x < img.getWidth(); x += size){
+			g.drawLine(x, 0, x, img.getHeight());
+		}
+		for(int y = startY; y < img.getHeight(); y += size){
+			g.drawLine(0, y, img.getWidth(), y);
+		}
+		
 	}
 	
 	public BufferedImage getImage(){

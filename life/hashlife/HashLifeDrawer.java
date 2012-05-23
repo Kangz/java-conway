@@ -22,8 +22,6 @@ public class HashLifeDrawer implements LifeDrawer {
 		y -= realSize/2;
 
 		Graphics g = b.getGraphics();
-		g.setColor(Color.black);
-		g.fillRect(0, 0, b.getWidth(), b.getHeight());
 		recDraw(b, g, x, y, zoom, cell);
 	}
 	

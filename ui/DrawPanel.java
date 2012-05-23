@@ -123,6 +123,19 @@ public class DrawPanel extends JPanel {
 				p.zoomIn(1, p.getWidth()/2, p.getHeight()/2);
 			} else if(e.getKeyCode() == KeyEvent.VK_MINUS || e.getKeyCode() == KeyEvent.VK_K){
 				p.zoomOut(1, p.getWidth()/2, p.getHeight()/2);	
+
+		}else if(e.getKeyCode() == KeyEvent.VK_UP){
+				p.originy += 50;
+				p.applyTransform();
+			}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				p.originy -= 50;
+				p.applyTransform();
+			}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				p.originx += 50;
+				p.applyTransform();
+			}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+				p.originx -= 50;
+				p.applyTransform();
 			}
 		}
 
