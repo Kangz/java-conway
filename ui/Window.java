@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class Window extends JFrame {
 	
 	final public MenuBar menuBar;

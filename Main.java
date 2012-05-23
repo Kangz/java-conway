@@ -20,9 +20,11 @@ public class Main {
 	
 	static void testRLE() {
 		
-		int[][] t = RLE.read("media/puffer.rle");
-		
+		int[][] t = RLE.read("media/glider.rle");
 		System.out.println(MacroCell.niceStringFromTab(t));
+		RLE.write("media/test.rle", t);
+		t = RLE.read("media/test.rle");
+		System.out.println(MacroCell.niceStringFromTab(t));	
 		
 	}
 	

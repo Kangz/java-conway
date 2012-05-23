@@ -1,7 +1,10 @@
 package util;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -30,6 +33,7 @@ public class RLE {
 		
 		int n = Integer.parseInt(matcher.group(1));
 		int m = Integer.parseInt(matcher.group(2));
+		@SuppressWarnings("unused")
 		String rule = matcher.group(3);
 		
 		int[][] t = new int[m][n];
@@ -64,6 +68,73 @@ public class RLE {
 		
 		return null;
 		
+	}
+	
+	static public void write(String file, int[][] tab) {
+		try {
+			BufferedWriter out;
+			out = new BufferedWriter(new FileWriter(file));
+			
+			String header = "x = " + tab.length + ", y = " + tab[0].length + ", rule = B3/S23";
+			out.write(header);
+			out.newLine();
+			
+			int lines = 0;
+			for(int i=0; i<tab.length; i++) {
+				int buffer = 0;
+				int last = -1;
+				for(int j=0; j<tab[i].length; j++) {
+					if(tab[i][j] == 1) {
+						
+						if(lines > 0) {
+							if(lines > 1)
+								out.write(Integer.toString(lines));
+							out.write('$');
+							lines = 0;
+						}
+						
+						if(last == 0) {
+							if(buffer > 1)
+								out.write(Integer.toString(buffer));
+							out.write('b');
+							buffer = 0;
+						}
+						
+						last = 1;
+						buffer++;
+					} else {
+						if(last == 1) {
+							if(buffer > 1)
+								out.write(Integer.toString(buffer));
+							out.write('o');
+							buffer = 0;
+						}
+						last = 0;
+						buffer++;
+					}
+				}
+				if(last == 1) {
+					if(buffer > 1)
+						out.write(Integer.toString(buffer));
+					out.write('o');
+					buffer = 0;					
+				}
+				lines++;
+			}
+
+			if(lines > 0) {
+				if(lines > 1)
+					out.write(Integer.toString(lines));
+				out.write('$');
+				lines = 0;
+			}
+			
+			out.write('!');
+			out.close();
+		} catch (IOException e) {
+			System.out.println("Couldn't write the file "+file+".");
+		} finally {
+		}
 	}
 	
 }
