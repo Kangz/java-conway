@@ -39,7 +39,7 @@ public class Main {
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/metapixel.rle"));
+		a.loadFromArray(RLE.read("media/ticker.rle"));
 		
 		Window w = new Window();
 		w.setVisible(true);
@@ -54,22 +54,5 @@ public class Main {
 		drawer.start();
 
 		evolver.run();
-		
-/*		
-		while(true){
-			
-			while(drawer.getDrawer().opLength() > 15){
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			a.evolve(32);
-			
-			drawer.getDrawer().addOp(a.getDrawer(), a.getState());
-		}
-		*/
 	}
 }

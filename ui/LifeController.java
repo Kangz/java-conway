@@ -132,7 +132,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 		return (! paused) && drawer.getDrawer().opLength() < 4 ;
 	}
 	
-	public void onNewState(LifeAlgo algo){
-		drawer.getDrawer().addOp(algo.getDrawer(), algo.getState());
+	public void onNewState(LifeAlgo algo, boolean forced){
+		drawer.getDrawer().addOp(algo.getDrawer(), algo.getState(), forced);
 	}
 }

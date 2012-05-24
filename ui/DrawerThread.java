@@ -45,6 +45,7 @@ public class DrawerThread implements Runnable {
 	
 	private boolean showGrid = true;
 	
+	private boolean forcedDraw = false;
 	private boolean animFrame = false;
 	private boolean paused = false;
 	
@@ -61,10 +62,21 @@ public class DrawerThread implements Runnable {
 		}
 	}
 	
-	public void addOp(LifeDrawer d, LifeState s){
+	public void addOp(LifeDrawer d, LifeState s, boolean forced){
 		synchronized(pendingStates){
-			pendingStates.add(new DrawState(d, s));
-//			throw new RuntimeException("AddOP");
+			Queue<DrawState> states;
+			if(forced){
+				states = new LinkedList<DrawState>();
+			}else{
+				states = pendingStates;
+			}
+			states.add(new DrawState(d, s));
+		}
+		if(forced){
+			synchronized(this){
+				notify();
+			}
+			forcedDraw = true;			
 		}
 	}
 
@@ -156,10 +168,11 @@ public class DrawerThread implements Runnable {
 				}
 			} catch (InterruptedException e) {
 			}
-			if (animFrame) {
+			if (animFrame && !forcedDraw) {
 				isAnimFrame = true;
 			}
 			animFrame = false;
+			forcedDraw = false;
 		}
 	}
 	

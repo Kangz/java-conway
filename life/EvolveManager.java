@@ -1,5 +1,8 @@
 package life;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import ui.LifeController;
 
 public class EvolveManager implements Runnable {
@@ -8,8 +11,56 @@ public class EvolveManager implements Runnable {
 	LifeController control;
 	int speed = 1;
 	boolean running = false;
+	boolean forcedState = false;
+
+	Queue<Order> orders = new LinkedList<Order>();
+	
+	abstract class Order{
+		abstract void doOrder();
+	}
+	
+	class LoadTabOrder extends Order{
+		int[][] tab;
+		LoadTabOrder(int[][] t){
+			tab = t;
+		}
+		void doOrder(){
+			algo.loadFromArray(tab);
+		}
+	}
+
+	class ForcedOrder extends Order{
+		void doOrder(){
+			forcedState = true;
+		}
+	}
+
+	class ToggleCellOrder extends Order{
+		int x, y;
+		ToggleCellOrder(int a, int b){
+			x = a;
+			y = b;
+		}
+		void doOrder(){
+			algo.toggleCellAt(x, y);
+		}
+	}
 	
 	public EvolveManager(){
+	}
+	
+	public void loadTab(int[][] t){
+		synchronized(orders){
+			orders.add(new LoadTabOrder(t));
+			orders.add(new ForcedOrder());
+		}
+	}
+
+	public void toggleCell(int x, int y){
+		synchronized(orders){
+			orders.add(new ToggleCellOrder(x, y));
+			orders.add(new ForcedOrder());
+		}
 	}
 	
 	public void setController(LifeController c){
@@ -48,9 +99,21 @@ public class EvolveManager implements Runnable {
 				}
 			}
 			
+			Queue<Order> copiedOrders;
+			synchronized(orders){
+				copiedOrders = orders;
+				orders = new LinkedList<Order>();
+			}
+			
+			for(Order order : copiedOrders){
+				order.doOrder();
+			}
+			
 			algo.evolve(speed);
 			
-			control.onNewState(algo);
+			control.onNewState(algo, forcedState);
+			
+			forcedState = false;
 		}
 	}
 }
