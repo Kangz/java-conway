@@ -55,18 +55,20 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		Point pt = e.getPoint();
-		Point origin = drawer.getOrigin();
-		int zoom = drawer.getZoom();
-		int x = pt.x - origin.x, y = pt.y - origin.y;
-		if(zoom >= 0) {
-			x >>= zoom;
+		if(paused && e.getButton() == MouseEvent.BUTTON3) {
+			Point pt = e.getPoint();
+			Point origin = drawer.getOrigin();
+			int zoom = drawer.getZoom();
+			int x = pt.x - origin.x, y = pt.y - origin.y;
+			if(zoom >= 0) {
+				x >>= zoom;
 			y >>= zoom;
-		} else {
-			x <<= -zoom;
-			y <<= -zoom;
+			} else {
+				x <<= -zoom;
+				y <<= -zoom;
+			}
+			evolver.toggleCell(y, x);
 		}
-		evolver.toggleCell(y, x);
 	}
 	
 	public void mouseEntered(MouseEvent e) {

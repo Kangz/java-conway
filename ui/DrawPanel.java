@@ -65,7 +65,9 @@ public class DrawPanel extends JPanel {
 	}
 
 	public void zoomIn(int i, int x, int y) {
-		//TODO prevent from zooming too far
+		if(zoom + i > 8) {
+			i = 8 - zoom;
+		}
 		zoom += i;
 		originx = ((originx - x) << i) + x;
 		originy = ((originy - y) << i) + y;
@@ -73,6 +75,9 @@ public class DrawPanel extends JPanel {
 	}
 
 	public void zoomOut(int i, int x, int y) {
+		if(zoom - i < -19) {
+			i = zoom + 19;
+		}
 		zoom -= i;
 		originx = ((originx - x) >> i) + x;
 		originy = ((originy - y) >> i) + y;

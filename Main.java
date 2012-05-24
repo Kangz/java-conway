@@ -29,7 +29,7 @@ public class Main {
 	}
 	
 	static void testHashlife() {
-		int[][] t = RLE.read("media/glider.rle");
+		int[][] t = RLE.read("media/magic.rle");
 
 		HashLifeState s = new HashLifeState(t);
 		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
@@ -45,7 +45,7 @@ public class Main {
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/ticker.rle"));
+		a.loadFromArray(RLE.read("media/magic.rle"));
 		
 		Window w = new Window();
 		w.setVisible(true);

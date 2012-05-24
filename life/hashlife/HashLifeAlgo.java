@@ -50,9 +50,7 @@ public class HashLifeAlgo implements LifeAlgo {
 	@Override
 	public int toggleCellAt(int x, int y) {
 		int state = s.getCellAt(x, y);
-		System.out.println("Current state: "+state);
 		s.setCellAt(x, y, 1 - state);
-		System.out.println("New state: "+s.getCellAt(x, y));
 		return state;
 	}
 
