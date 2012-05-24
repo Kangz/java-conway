@@ -9,12 +9,12 @@ public class Window extends JFrame {
 	final public MenuBar menuBar;
 	final public Panel panel;
 	
-	public Window() {
+	public Window(LifeController controller) {
 		
-		menuBar = new MenuBar();
+		menuBar = new MenuBar(controller);
 		setJMenuBar(menuBar);
 
-		panel = new Panel();
+		panel = new Panel(controller);
 		
 		setSize(640, 480);
 		setTitle("Main Window");

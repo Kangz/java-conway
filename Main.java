@@ -45,19 +45,18 @@ public class Main {
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/magic.rle"));
+		a.loadFromArray(RLE.read("media/metapixel.rle"));
 		
-		Window w = new Window();
+		LifeController controller = new LifeController();
+		
+		Window w = new Window(controller);
 		w.setVisible(true);
 
 		DrawPanel drawer = w.getDrawPanel();
-		EvolveManager evolver = new EvolveManager();
-		LifeController controller = new LifeController(drawer, evolver);
+		EvolveManager evolver = new EvolveManager(controller, a);
 
-		evolver.setAlgo(a);
-		evolver.setController(controller);
 		drawer.addListener(controller);
-		drawer.start();
+		w.getDrawPanel().start();
 
 		evolver.run();
 	}

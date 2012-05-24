@@ -8,9 +8,9 @@ public class Panel extends JPanel {
 	
 	final public DrawPanel drawPanel;
 	
-	public Panel() {
+	public Panel(LifeController controller) {
 		super(new BorderLayout());
-		drawPanel = new DrawPanel();
+		drawPanel = new DrawPanel(controller);
 		add(drawPanel, BorderLayout.CENTER);
 	}
 	

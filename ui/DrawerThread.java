@@ -66,7 +66,6 @@ public class DrawerThread implements Runnable {
 		synchronized(pendingStates){
 			Queue<DrawState> states;
 			if(forced){
-				System.out.println("Received a forced order");
 				states = new LinkedList<DrawState>();
 			}else{
 				states = pendingStates;
@@ -149,7 +148,6 @@ public class DrawerThread implements Runnable {
 	
 				DrawState toDraw = lastd;
 				if(! isAnimFrame) {
-					System.out.println("Getting a new State");
 					synchronized(pendingStates){
 						toDraw = pendingStates.poll();
 					}

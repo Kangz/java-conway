@@ -63,6 +63,8 @@ public class RLE {
 				}
 				else if(c == '!')
 					return t;
+				else
+					return null;
 			}
 		} while(in.hasNext());
 		

@@ -14,10 +14,11 @@ public class DrawPanel extends JPanel {
 	private int originy = 0;
 	private int zoom = 0;
 	
-	public DrawPanel() {
+	public DrawPanel(LifeController controller) {
 		setFocusable(true);
 		requestFocusInWindow();
 		dt = new DrawerThread(this);
+		controller.setDrawer(this);
 	}
 	
 	public void addListener(LifeController listener){

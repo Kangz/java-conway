@@ -53,7 +53,10 @@ public class EvolveManager implements Runnable {
 		}
 	}
 	
-	public EvolveManager(){
+	public EvolveManager(LifeController controller, LifeAlgo a){
+		controller.setEvolver(this);
+		setController(controller);
+		setAlgo(a);
 	}
 	
 	public void loadTab(int[][] t){
@@ -120,11 +123,9 @@ public class EvolveManager implements Runnable {
 			
 			for(Order order : copiedOrders){
 				order.doOrder();
-				System.out.println("ApplyOrder");
 			}
 
 			if(! preventEvolve){
-				System.out.println("DoEvolve");
 				algo.evolve(speed);
 			}
 			

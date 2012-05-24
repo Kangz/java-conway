@@ -16,19 +16,26 @@ import life.LifeAlgo;
 
 public class LifeController extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
 	
-	protected final DrawPanel drawer;
-	protected final EvolveManager evolver;
+	protected DrawPanel drawer;
+	protected EvolveManager evolver;
 	protected Point lastMousePos = new Point(0, 0);
 	protected boolean paused = false;
 	protected int speed = 0;
 	
-	public LifeController(DrawPanel p, EvolveManager evolver) {
+	public LifeController() {
+		
+	}
+	
+	public void setDrawer(DrawPanel p) {
 		this.drawer = p;
+	}
+	
+	public void setEvolver(EvolveManager evolver) {
 		this.evolver = evolver;
 	}
 	
 	public void loadFromArray(int[][] t) {
-		evolver.getAlgo().loadFromArray(t);
+		evolver.loadTab(t);
 	}
 
 	public void setSpeed(int s){
