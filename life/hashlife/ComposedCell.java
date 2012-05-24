@@ -1,7 +1,5 @@
 package life.hashlife;
 
-import java.util.Arrays;
-
 class ComposedCell extends MacroCell {
 	
 	final MacroCell[] quad ;
@@ -13,7 +11,7 @@ class ComposedCell extends MacroCell {
 				quad[1].off && 
 				quad[2].off && 
 				quad[3].off, calcDensity(quad));
-		this.quad = Arrays.copyOf(quad, 4);
+		this.quad = quad.clone();
 		this.result = new MacroCell[this.dim-1];
 	}
 
@@ -26,7 +24,13 @@ class ComposedCell extends MacroCell {
 	}
 	
 	public boolean equals(Object o) {
-		return (o instanceof ComposedCell) && Arrays.equals(quad, ((ComposedCell) o).quad);
+		if(!(o instanceof ComposedCell))
+			return false;
+		ComposedCell c = (ComposedCell) o;
+		return 	quad[0] == c.quad[0] &&
+				quad[1] == c.quad[1] &&
+				quad[2] == c.quad[2] &&
+				quad[3] == c.quad[3];
 	}
 	
 	public int hashCode() {
@@ -145,7 +149,9 @@ class ComposedCell extends MacroCell {
 			return borderize().setCell(x + halfSize,  y + halfSize, state);
 		int i = x/halfSize, j = y/halfSize;
 		
-		MacroCell[] tmp = Arrays.copyOf(quad, 4);
+		MacroCell[] tmp = new MacroCell[4];
+		for(int k=0; k<4; k++)
+			tmp[k] = quad[k];
 		tmp[2*i+j] = tmp[2*i+j].setCell(x - i*halfSize, y - j*halfSize, state);
 		return Memoization.get(tmp);
 	}

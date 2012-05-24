@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 
 public class RLE {
 	
-	static public int[][] read(String file) {
+	static public int[][] read(File file) {
 		Scanner in;
 		try {
-			in = new Scanner(new File(file));
+			in = new Scanner(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
@@ -72,7 +72,7 @@ public class RLE {
 		
 	}
 	
-	static public void write(String file, int[][] tab) {
+	static public void write(File file, int[][] tab) {
 		try {
 			BufferedWriter out;
 			out = new BufferedWriter(new FileWriter(file));

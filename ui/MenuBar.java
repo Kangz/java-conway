@@ -3,8 +3,6 @@ package ui;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import util.RLE;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -26,10 +24,7 @@ public class MenuBar extends JMenuBar {
 			public void actionPerformed(ActionEvent e) {
 				int choice = fc.showOpenDialog(getParent());
 				if(choice == JFileChooser.APPROVE_OPTION) {
-					int[][] t =  RLE.read(fc.getSelectedFile().getAbsolutePath());
-					if(t != null) {
-						controller.loadFromArray(t);
-					}
+					controller.loadFromFile(fc.getSelectedFile());
 				} else {
 					
 				}
@@ -44,6 +39,7 @@ public class MenuBar extends JMenuBar {
 			public void actionPerformed(ActionEvent e) {
 				int choice = fc.showSaveDialog(getParent());
 				if(choice == JFileChooser.APPROVE_OPTION) {
+					controller.saveToFile(fc.getSelectedFile());
 				} else {
 					
 				}

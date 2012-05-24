@@ -1,9 +1,11 @@
 package life;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import ui.LifeController;
+import util.RLE;
 
 public class EvolveManager implements Runnable {
 
@@ -20,13 +22,23 @@ public class EvolveManager implements Runnable {
 		abstract void doOrder();
 	}
 	
-	class LoadTabOrder extends Order{
-		int[][] tab;
-		LoadTabOrder(int[][] t){
-			tab = t;
+	class LoadFromFileOrder extends Order{
+		File file;
+		LoadFromFileOrder(File f){
+			file = f;
 		}
 		void doOrder(){
-			algo.loadFromArray(tab);
+			algo.loadFromArray(RLE.read(file));
+		}
+	}
+	
+	class SaveToFileOrder extends Order{
+		File file;
+		SaveToFileOrder(File f){
+			file = f;
+		}
+		void doOrder(){
+			RLE.write(file, algo.saveToArray());
 		}
 	}
 
@@ -59,9 +71,17 @@ public class EvolveManager implements Runnable {
 		setAlgo(a);
 	}
 	
-	public void loadTab(int[][] t){
+	public void loadFromFile(File f){
 		synchronized(orders){
-			orders.add(new LoadTabOrder(t));
+			orders.add(new LoadFromFileOrder(f));
+			orders.add(new ForcedOrder());
+			orders.add(new PreventEvolveOrder());
+		}
+	}
+	
+	public void saveToFile(File f){
+		synchronized(orders){
+			orders.add(new SaveToFileOrder(f));
 			orders.add(new ForcedOrder());
 			orders.add(new PreventEvolveOrder());
 		}

@@ -2,7 +2,7 @@ package life.hashlife;
 
 class HexaCell extends ComposedCell {
 
-	final FourCell quad[] = new FourCell[4];
+	final FourCell[] quad = new FourCell[4];
 
 	HexaCell(MacroCell ... quad) {
 		super(quad);

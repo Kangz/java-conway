@@ -1,3 +1,5 @@
+import java.io.File;
+
 import ui.DrawPanel;
 import ui.LifeController;
 import ui.Window;
@@ -20,16 +22,19 @@ public class Main {
 	
 	static void testRLE() {
 		
-		int[][] t = RLE.read("media/glider.rle");
+		File in = new File("media/glider.rle");
+		File out = new File("media/test.rle");
+		
+		int[][] t = RLE.read(in);
 		System.out.println(MacroCell.niceStringFromTab(t));
-		RLE.write("media/test.rle", t);
-		t = RLE.read("media/test.rle");
+		RLE.write(out, t);
+		t = RLE.read(out);
 		System.out.println(MacroCell.niceStringFromTab(t));	
 		
 	}
 	
 	static void testHashlife() {
-		int[][] t = RLE.read("media/magic.rle");
+		int[][] t = RLE.read(new File("media/magic.rle"));
 
 		HashLifeState s = new HashLifeState(t);
 		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
@@ -45,7 +50,8 @@ public class Main {
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/metapixel.rle"));
+		int[][] init = {{0}};
+		a.loadFromArray(init);
 		
 		LifeController controller = new LifeController();
 		

@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
 
 import life.EvolveManager;
 import life.LifeAlgo;
@@ -34,8 +35,12 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 		this.evolver = evolver;
 	}
 	
-	public void loadFromArray(int[][] t) {
-		evolver.loadTab(t);
+	public void loadFromFile(File f) {
+		evolver.loadFromFile(f);
+	}
+	
+	public void saveToFile(File f) {
+		evolver.saveToFile(f);
 	}
 
 	public void setSpeed(int s){
