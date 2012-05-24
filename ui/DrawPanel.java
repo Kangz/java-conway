@@ -3,6 +3,7 @@ package ui;
 import javax.swing.*;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
 @SuppressWarnings("serial")
 public class DrawPanel extends JPanel {
@@ -76,6 +77,14 @@ public class DrawPanel extends JPanel {
 		originx = ((originx - x) >> i) + x;
 		originy = ((originy - y) >> i) + y;
 		applyTransform();
+	}
+	
+	public int getZoom() {
+		return zoom;
+	}
+	
+	public Point getOrigin() {
+		return new Point(originx, originy);
 	}
 	
 }

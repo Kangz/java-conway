@@ -33,7 +33,13 @@ public class Main {
 
 		HashLifeState s = new HashLifeState(t);
 		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
-		s.setCellAt(9, 9, 1);
+		s.setCellAt(20, 20, 1);
+		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
+		s.setCellAt(19, 20, 1);
+		System.out.println(s.getCellAt(19, 20));
+		System.out.println(s.getCellAt(2, 20));
+		s.setCellAt(20, 20, 0);
+		s.setCellAt(21, 20, 1);
 		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
 	}
 	

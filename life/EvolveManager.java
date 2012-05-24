@@ -42,6 +42,7 @@ public class EvolveManager implements Runnable {
 			y = b;
 		}
 		void doOrder(){
+			System.out.println("Order accounted : toggleCellAt("+x+","+y+")");
 			algo.toggleCellAt(x, y);
 		}
 	}
