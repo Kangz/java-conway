@@ -8,19 +8,26 @@ import java.awt.event.ActionEvent;
 public class MenuBar extends JMenuBar {
 	
 	public MenuBar() {
-		JMenu menu;
-		JMenuItem menuItem;
+		JMenu menu = new JMenu("File");
 		
-		menu = new JMenu("File");
-		add(menu);
+		JMenuItem loadItem = new JMenuItem("Load a RLE file");
+		loadItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+		loadItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		menu.add(loadItem);
 		
-		menuItem = new JMenuItem("Quit");
-		menuItem.addActionListener(new ActionListener() {
+		JMenuItem quitItem = new JMenuItem("Quit");
+		quitItem.setAccelerator(KeyStroke.getKeyStroke("ctrl Q"));
+		quitItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		menu.add(menuItem);
+		menu.add(quitItem);
+		add(menu);
 	}
 
 }

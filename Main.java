@@ -29,22 +29,17 @@ public class Main {
 	}
 	
 	static void testHashlife() {
-		int[][] t = RLE.read("media/ticker.rle");
+		int[][] t = RLE.read("media/glider.rle");
 
 		HashLifeState s = new HashLifeState(t);
-		
-		long time = System.currentTimeMillis();
-		s.evolve(1);
-		s.evolve(1);
-		s.evolve(1);
-		s.evolve(1);
-		s.evolve(1);
-		System.out.println(System.currentTimeMillis() - time);
+		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
+		s.setCellAt(9, 9, 1);
+		System.out.println(MacroCell.niceStringFromTab(s.toArray()));
 	}
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		a.loadFromArray(RLE.read("media/ticker.rle"));
+		a.loadFromArray(RLE.read("media/metapixel.rle"));
 		
 		Window w = new Window();
 		w.setVisible(true);

@@ -49,11 +49,17 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 			drawer.zoomOut(i, lastMousePos.x, lastMousePos.y);
 		}		
 	}
+	
 	public void mouseClicked(MouseEvent e) {
+	
 	}
+	
 	public void mouseEntered(MouseEvent e) {
+	
 	}
+	
 	public void mouseExited(MouseEvent e) {
+	
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -72,7 +78,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	public void mouseMoved(MouseEvent e) {
 		lastMousePos = e.getPoint();
 	}
-
+	
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 			case KeyEvent.VK_ADD:
@@ -103,11 +109,11 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				drawer.getDrawer().setPaused(paused);
 				break;
 			case KeyEvent.VK_T:
-				speed = Math.min(speed + 1, 10);
+				speed = Math.min(speed + 1, 12);
 				setSpeed(speed);
 				break;			
 			case KeyEvent.VK_R:
-				speed = Math.max(speed - 1, -8);
+				speed = Math.max(speed - 1, -6);
 				setSpeed(speed);
 				break;
 

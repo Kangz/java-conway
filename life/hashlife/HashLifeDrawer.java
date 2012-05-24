@@ -50,7 +50,8 @@ public class HashLifeDrawer implements LifeDrawer {
 		}
 		
 		if(cell.dim <= -zoom) {
-			int color = cell.density;
+			//int color = cell.density*(255-20)/255 + 20;
+			int color = 255;
 			int rgb = (new Color(color, color, color).getRGB());
 			b.setRGB(x, y, rgb);
 			return;

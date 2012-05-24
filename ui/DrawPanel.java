@@ -45,6 +45,7 @@ public class DrawPanel extends JPanel {
 	
 	public void onResize() {
 		dt.setDim(getWidth(), getHeight());
+		dt.requestAnimFrame();
 	}
 	
 	@Override
@@ -77,4 +78,4 @@ public class DrawPanel extends JPanel {
 		applyTransform();
 	}
 	
-	}
+}

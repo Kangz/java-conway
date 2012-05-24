@@ -23,17 +23,15 @@ public class HashLifeState implements LifeState {
 		return new HashLifeState(this);
 	}
 	
-	//TODO
-	int getCellAt(int x, int y) {
+	public int getCellAt(int x, int y) {
 		return state.getCell(x, y);
 	}
 	
-	//TODO
-	void setCellAt(int x, int y, int newState) {
+	public void setCellAt(int x, int y, int newState) {
 		state = state.setCell(x, y, newState);
 	}
 	
-	int[][] toArray() {
+	public int[][] toArray() {
 		return state.toTab();
 	}
 	

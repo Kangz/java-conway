@@ -131,6 +131,8 @@ class ComposedCell extends MacroCell {
 
 	@Override
 	int getCell(int x, int y) {
+		if(x < 0 || y < 0 || x >= size || y >= size)
+			return 0;
 		int halfSize = size/2;
 		int i = x/halfSize, j = y/halfSize;
 		return quad[2*i+j].getCell(x - i*halfSize, y - j*halfSize);
@@ -139,6 +141,8 @@ class ComposedCell extends MacroCell {
 	@Override
 	MacroCell setCell(int x, int y, int state) {
 		int halfSize = size/2;
+		if(x < 0 || y < 0 || x >= size || y >= size)
+			return borderize().setCell(x + halfSize,  y + halfSize, state);
 		int i = x/halfSize, j = y/halfSize;
 		
 		MacroCell[] tmp = Arrays.copyOf(quad, 4);
