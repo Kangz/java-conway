@@ -12,7 +12,8 @@ public class EvolveManager implements Runnable {
 	int speed = 1;
 	boolean running = false;
 	boolean forcedState = false;
-
+	boolean preventEvolve = false;
+	
 	Queue<Order> orders = new LinkedList<Order>();
 	
 	abstract class Order{
@@ -35,6 +36,12 @@ public class EvolveManager implements Runnable {
 		}
 	}
 
+	class PreventEvolveOrder extends Order{
+		void doOrder(){
+			preventEvolve = true;
+		}
+	}
+
 	class ToggleCellOrder extends Order{
 		int x, y;
 		ToggleCellOrder(int a, int b){
@@ -54,6 +61,7 @@ public class EvolveManager implements Runnable {
 		synchronized(orders){
 			orders.add(new LoadTabOrder(t));
 			orders.add(new ForcedOrder());
+			orders.add(new PreventEvolveOrder());
 		}
 	}
 
@@ -61,6 +69,7 @@ public class EvolveManager implements Runnable {
 		synchronized(orders){
 			orders.add(new ToggleCellOrder(x, y));
 			orders.add(new ForcedOrder());
+			orders.add(new PreventEvolveOrder());
 		}
 	}
 	
@@ -92,14 +101,18 @@ public class EvolveManager implements Runnable {
 		running = true;
 		
 		while(running){
-			while(! control.needsMoreEvolve()){
+			boolean hasOrders = false;
+			while(! control.needsMoreEvolve() && ! hasOrders){
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				synchronized(orders){
+					hasOrders = !orders.isEmpty();
+				}
 			}
-			
+						
 			Queue<Order> copiedOrders;
 			synchronized(orders){
 				copiedOrders = orders;
@@ -108,9 +121,15 @@ public class EvolveManager implements Runnable {
 			
 			for(Order order : copiedOrders){
 				order.doOrder();
+				System.out.println("ApplyOrder");
+			}
+
+			if(! preventEvolve){
+				System.out.println("DoEvolve");
+				algo.evolve(speed);
 			}
 			
-			algo.evolve(speed);
+			preventEvolve = false;
 			
 			control.onNewState(algo, forcedState);
 			

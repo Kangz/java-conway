@@ -66,11 +66,13 @@ public class DrawerThread implements Runnable {
 		synchronized(pendingStates){
 			Queue<DrawState> states;
 			if(forced){
+				System.out.println("Received a forced order");
 				states = new LinkedList<DrawState>();
 			}else{
 				states = pendingStates;
 			}
 			states.add(new DrawState(d, s));
+			pendingStates = states;
 		}
 		if(forced){
 			synchronized(this){
@@ -138,21 +140,20 @@ public class DrawerThread implements Runnable {
 			
 			//TODO skip if it is too close from another interval and an anim frame
 			
-			if(!paused || isAnimFrame){
+			if(!paused || isAnimFrame || forcedDraw){
 				if(! isAnimFrame) {
 					target_time = System.currentTimeMillis() + interval;
 				}
 	
 				synchronizeDims();
 	
-				DrawState d = null;
+				DrawState toDraw = lastd;
 				if(! isAnimFrame) {
+					System.out.println("Getting a new State");
 					synchronized(pendingStates){
-						d = pendingStates.poll();
+						toDraw = pendingStates.poll();
 					}
 				}
-				
-				DrawState toDraw = isAnimFrame ? lastd : d;
 				
 				if (toDraw != null){
 					draw(toDraw);				
@@ -162,6 +163,7 @@ public class DrawerThread implements Runnable {
 				}
 			}
 			isAnimFrame = false;
+			forcedDraw = false;
 			try {
 				synchronized(this){
 					wait(Math.max(target_time - System.currentTimeMillis(), 1));
@@ -172,7 +174,6 @@ public class DrawerThread implements Runnable {
 				isAnimFrame = true;
 			}
 			animFrame = false;
-			forcedDraw = false;
 		}
 	}
 	
