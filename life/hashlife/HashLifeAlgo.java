@@ -11,7 +11,7 @@ public class HashLifeAlgo implements LifeAlgo {
 	@Override
 	public void setState(LifeState state) {
 		if (state instanceof HashLifeState) {
-			s = (HashLifeState) state;
+			s = ((HashLifeState) state).copy();
 		} else {
 			throw new RuntimeException("NaiveLife.loadState needs a HashLifeState");
 		}

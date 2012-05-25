@@ -157,7 +157,6 @@ public class EvolveManager implements Runnable {
 	}
 	
 	public void setSpeed(int s){
-		System.out.println("SetSpeed " + s);
 		speed = s;
 	}
 	
@@ -206,17 +205,18 @@ public class EvolveManager implements Runnable {
 					
 					if(reachedEvent < target){
 						int offset = (int) (target - reachedEvent);
-						//System.out.println("Target: " + target + " Reached " + reachedEvent + " Offset " + offset);
 
 						algo.evolve(offset);
-						stepNumber += offset;//reachedEvent;//target; 
+						stepNumber += offset;
 					}
 				}
 			}
 
 			EvolveManagerState evolveState = new EvolveManagerState(stepNumber, forcedState, algo);
 			
-			stateStack.add(evolveState);
+			if(! preventEvolve){
+				stateStack.add(evolveState);
+			}
 			control.onNewState(evolveState);
 			
 			forcedState = false;

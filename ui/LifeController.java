@@ -164,7 +164,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 			case KeyEvent.VK_R:
 				reverse = ! reverse;
 				setSpeed(speed);
-				evolver.forceNext();
+				drawer.getDrawer().flushOps();
 				break;
 
 			default:
