@@ -21,6 +21,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	protected DrawPanel drawer;
 	protected EvolveManager evolver;
 	protected Point lastMousePos = new Point(0, 0);
+	protected boolean leftButton = false;
 	protected boolean paused = false;
 	protected int speed = 0;
 	
@@ -30,6 +31,10 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	
 	public void setDrawer(DrawPanel p) {
 		this.drawer = p;
+	}
+	
+	public DrawPanel getDrawer() {
+		return drawer;
 	}
 	
 	public void setEvolver(EvolveManager evolver) {
@@ -95,15 +100,23 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 
 	public void mousePressed(MouseEvent e) {
 		lastMousePos = e.getPoint();
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			leftButton = true;
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			leftButton = false;
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		Point pt = e.getPoint();
-		drawer.translate(pt.x - lastMousePos.x, pt.y - lastMousePos.y);
-		lastMousePos = pt;
+		if(leftButton) {
+			Point pt = e.getPoint();
+			drawer.translate(pt.x - lastMousePos.x, pt.y - lastMousePos.y);
+			lastMousePos = pt;
+		}
 	}
 
 	public void mouseMoved(MouseEvent e) {
