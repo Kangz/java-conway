@@ -3,6 +3,7 @@ package life;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 import ui.LifeController;
 import util.RLE;
@@ -18,6 +19,7 @@ public class EvolveManager implements Runnable {
 	long stepNumber = 0;
 	
 	Queue<Order> orders = new LinkedList<Order>();
+	Stack<EvolveManagerState> stateStack = new Stack<EvolveManagerState>();
 	
 	abstract class Order{
 		abstract void doOrder();
@@ -32,7 +34,6 @@ public class EvolveManager implements Runnable {
 			algo = state.algo;
 			stepNumber = state.nSteps;
 			algo.setState(state.state);
-			System.out.println("Reset to state n°" + stepNumber);
 		}
 	}
 	
@@ -85,6 +86,12 @@ public class EvolveManager implements Runnable {
 		setAlgo(a);
 	}
 	
+	public void getBackToClosestState(long target){
+		while (stateStack.size() > 1 && stateStack.peek().nSteps > target){
+			stateStack.pop();
+		}
+	}
+	
 	public void loadFromFile(File f){
 		synchronized(orders){
 			orders.add(new LoadFromFileOrder(f));
@@ -109,6 +116,12 @@ public class EvolveManager implements Runnable {
 		}
 	}
 	
+	public void forceNext(){
+		synchronized(orders){
+			orders.add(new ForcedOrder());
+		}
+	}
+	
 	public void setController(LifeController c){
 		control = c;
 	}
@@ -126,6 +139,7 @@ public class EvolveManager implements Runnable {
 	}
 	
 	public void setSpeed(int s){
+		System.out.println("SetSpeed " + s);
 		speed = s;
 	}
 	
@@ -160,17 +174,36 @@ public class EvolveManager implements Runnable {
 			}
 
 			if(! preventEvolve){
-				algo.evolve(speed);
-				stepNumber += speed;
+				int currentSpeed = speed;
+				if(currentSpeed >= 0){
+					algo.evolve(currentSpeed);
+					stepNumber += currentSpeed;
+				}else{
+					long target = stepNumber + currentSpeed;
+					getBackToClosestState(target);
+					
+					algo.setState(stateStack.peek().state);
+					long reachedEvent = stateStack.peek().nSteps;
+					stepNumber = reachedEvent;
+					
+					if(reachedEvent < target){
+						int offset = (int) (target - reachedEvent);
+						//System.out.println("Target: " + target + " Reached " + reachedEvent + " Offset " + offset);
+
+						algo.evolve(offset);
+						stepNumber += offset;//reachedEvent;//target; 
+					}
+				}
 			}
+
+			EvolveManagerState evolveState = new EvolveManagerState(stepNumber, forcedState, algo);
 			
-			preventEvolve = false;
-			
-			control.onNewState(new EvolveManagerState(stepNumber, forcedState, algo));
-			
-			System.out.println("Sent state n°" + stepNumber);
+
+			stateStack.add(evolveState);
+			control.onNewState(evolveState);
 			
 			forcedState = false;
+			preventEvolve = false;
 		}
 	}
 

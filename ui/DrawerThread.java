@@ -70,6 +70,7 @@ public class DrawerThread implements Runnable {
 	
 	public void addOp(LifeDrawer d, LifeState s, boolean forced, EvolveManagerState es){
 		synchronized(pendingStates){
+
 			Queue<DrawState> states;
 			if(forced){
 				states = new LinkedList<DrawState>();
@@ -83,7 +84,7 @@ public class DrawerThread implements Runnable {
 			synchronized(this){
 				notify();
 			}
-			forcedDraw = true;			
+			forcedDraw = true;
 		}
 	}
 
@@ -154,7 +155,6 @@ public class DrawerThread implements Runnable {
 				if(! isAnimFrame) {
 					target_time = System.currentTimeMillis() + interval;
 				}
-	
 				synchronizeDims();
 	
 				DrawState toDraw;
@@ -169,7 +169,7 @@ public class DrawerThread implements Runnable {
 				}
 				
 				if (toDraw != null){
-					draw(toDraw);				
+					draw(toDraw);
 					swap();
 					component.repaint();
 					synchronized(lastDrawLock){

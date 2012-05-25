@@ -41,8 +41,9 @@ class HashLifeState implements LifeState {
 		for(int i = 0; i<=s; i++)
 			state = state.borderize();
 		while(n > 0) {
-			if((steps&n) != 0)
+			if((steps&n) != 0){
 				state = state.result(s).borderize();
+			}
 			n /= 2;
 			s--;
 		}

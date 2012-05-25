@@ -14,7 +14,6 @@ import java.io.File;
 
 import life.EvolveManager;
 import life.EvolveManagerState;
-import life.LifeAlgo;
 
 public class LifeController extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
 	
@@ -24,6 +23,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	protected boolean leftButton = false;
 	protected boolean paused = false;
 	protected int speed = 0;
+	protected boolean reverse = false;
 	
 	public LifeController() {
 		
@@ -50,12 +50,13 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	}
 
 	public void setSpeed(int s){
+		int sign = reverse ? -1 : 1;
 		if (s >= 0){
 			drawer.getDrawer().setInterval(33);
-			evolver.setSpeed(1 << s);
+			evolver.setSpeed(sign * (1 << s));
 		}else{
 			drawer.getDrawer().setInterval(33 << -s);
-			evolver.setSpeed(1);
+			evolver.setSpeed(sign);
 		}
 	}
 	
@@ -152,13 +153,18 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				paused = ! paused;
 				drawer.getDrawer().setPaused(paused);
 				break;
-			case KeyEvent.VK_T:
+			case KeyEvent.VK_Y:
 				speed = Math.min(speed + 1, 12);
 				setSpeed(speed);
 				break;			
-			case KeyEvent.VK_R:
+			case KeyEvent.VK_T:
 				speed = Math.max(speed - 1, -6);
 				setSpeed(speed);
+				break;
+			case KeyEvent.VK_R:
+				reverse = ! reverse;
+				setSpeed(speed);
+				evolver.forceNext();
 				break;
 
 			default:
@@ -173,7 +179,11 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	}
 
 	public boolean needsMoreEvolve() {
-		return (! paused) && drawer.getDrawer().opLength() < 4 ;
+		if(!reverse){
+			return (! paused) && drawer.getDrawer().opLength() < 4;
+		}else{
+			return (! paused) && drawer.getDrawer().opLength() < 1;
+		}
 	}
 	
 	public void onNewState(EvolveManagerState s){
