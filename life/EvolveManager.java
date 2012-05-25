@@ -15,11 +15,25 @@ public class EvolveManager implements Runnable {
 	boolean running = false;
 	boolean forcedState = false;
 	boolean preventEvolve = false;
+	long stepNumber = 0;
 	
 	Queue<Order> orders = new LinkedList<Order>();
 	
 	abstract class Order{
 		abstract void doOrder();
+	}
+
+	class ResetFromStateOrder extends Order{
+		EvolveManagerState state;
+		ResetFromStateOrder(EvolveManagerState s){
+			state = s;
+		}
+		void doOrder(){
+			algo = state.algo;
+			stepNumber = state.nSteps;
+			algo.setState(state.state);
+			System.out.println("Reset to state n°" + stepNumber);
+		}
 	}
 	
 	class LoadFromFileOrder extends Order{
@@ -147,13 +161,22 @@ public class EvolveManager implements Runnable {
 
 			if(! preventEvolve){
 				algo.evolve(speed);
+				stepNumber += speed;
 			}
 			
 			preventEvolve = false;
 			
-			control.onNewState(algo, forcedState);
+			control.onNewState(new EvolveManagerState(stepNumber, forcedState, algo));
+			
+			System.out.println("Sent state n°" + stepNumber);
 			
 			forcedState = false;
+		}
+	}
+
+	public void resetState(EvolveManagerState lastDrawnState) {
+		synchronized(orders){
+			orders.add(new ResetFromStateOrder(lastDrawnState));
 		}
 	}
 }

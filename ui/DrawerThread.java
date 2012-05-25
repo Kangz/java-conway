@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import javax.swing.JComponent;
 
+import life.EvolveManagerState;
 import life.LifeDrawer;
 import life.LifeState;
 
@@ -18,9 +19,11 @@ public class DrawerThread implements Runnable {
 	class DrawState {
 		public LifeDrawer drawer;
 		public LifeState state;
-		DrawState(LifeDrawer d, LifeState s){
+		public EvolveManagerState evolverState;
+		DrawState(LifeDrawer d, LifeState s, EvolveManagerState es){
 			state = s;
 			drawer = d;
+			evolverState = es;
 		}
 	}
 
@@ -50,6 +53,9 @@ public class DrawerThread implements Runnable {
 	private boolean paused = false;
 	
 	private Queue<DrawState> pendingStates = new LinkedList<DrawState>();
+	private DrawState lastDraw;
+	private Object lastDrawLock = new Object();
+	
 	
 	public DrawerThread(JComponent container) {
 		this.component = container;
@@ -62,7 +68,7 @@ public class DrawerThread implements Runnable {
 		}
 	}
 	
-	public void addOp(LifeDrawer d, LifeState s, boolean forced){
+	public void addOp(LifeDrawer d, LifeState s, boolean forced, EvolveManagerState es){
 		synchronized(pendingStates){
 			Queue<DrawState> states;
 			if(forced){
@@ -70,7 +76,7 @@ public class DrawerThread implements Runnable {
 			}else{
 				states = pendingStates;
 			}
-			states.add(new DrawState(d, s));
+			states.add(new DrawState(d, s, es));
 			pendingStates = states;
 		}
 		if(forced){
@@ -110,6 +116,12 @@ public class DrawerThread implements Runnable {
 		interval = i;
 	}
 	
+	public EvolveManagerState getLastDrawnState(){
+		synchronized(lastDrawLock){
+			return lastDraw.evolverState;
+		}
+	}
+	
 	private void createImageBuffers(){
 		imageA = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
 		imageB = new BufferedImage(storedWidth, storedHeight, BufferedImage.TYPE_INT_RGB);
@@ -133,7 +145,6 @@ public class DrawerThread implements Runnable {
 		createImageBuffers();
 
 		long target_time = System.currentTimeMillis() + interval;
-		DrawState lastd = null;
 		boolean isAnimFrame = false;
 		while (running) {
 			
@@ -146,7 +157,11 @@ public class DrawerThread implements Runnable {
 	
 				synchronizeDims();
 	
-				DrawState toDraw = lastd;
+				DrawState toDraw;
+				synchronized(lastDrawLock){
+					toDraw = lastDraw;
+				}
+				
 				if(! isAnimFrame) {
 					synchronized(pendingStates){
 						toDraw = pendingStates.poll();
@@ -157,7 +172,9 @@ public class DrawerThread implements Runnable {
 					draw(toDraw);				
 					swap();
 					component.repaint();
-					lastd = toDraw;
+					synchronized(lastDrawLock){
+						lastDraw = toDraw;
+					}
 				}
 			}
 			isAnimFrame = false;

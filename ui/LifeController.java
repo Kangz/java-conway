@@ -13,6 +13,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 
 import life.EvolveManager;
+import life.EvolveManagerState;
 import life.LifeAlgo;
 
 public class LifeController extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
@@ -79,6 +80,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				x <<= -zoom;
 				y <<= -zoom;
 			}
+			evolver.resetState(drawer.getDrawer().getLastDrawnState());
 			evolver.toggleCell(y, x);
 		}
 	}
@@ -161,7 +163,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 		return (! paused) && drawer.getDrawer().opLength() < 4 ;
 	}
 	
-	public void onNewState(LifeAlgo algo, boolean forced){
-		drawer.getDrawer().addOp(algo.getDrawer(), algo.getState(), forced);
+	public void onNewState(EvolveManagerState s){
+		drawer.getDrawer().addOp(s.algo.getDrawer(), s.algo.getState(), s.forced, s);
 	}
 }
