@@ -1,0 +1,3 @@
+[submodule "life-gen"]
+	path = life-gen
+	url = git://github.com/tlrobinson/life-gen.git
