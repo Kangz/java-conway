@@ -43,7 +43,25 @@ public class EvolveManager implements Runnable {
 			file = f;
 		}
 		void doOrder(){
-			algo.loadFromArray(RLE.read(file));
+			int[][] array = RLE.read(file);
+			algo.loadFromArray(array);
+			int dimw = array[0].length;
+			int dimh = array.length;
+			int w = control.getDrawer().getWidth(), h = control.getDrawer().getHeight();
+			int zoom;
+			System.out.println(w - dimw);
+			if(w > dimw) {
+				zoom = 31 - Integer.numberOfLeadingZeros(w / dimw);
+			} else {
+				zoom = Integer.numberOfLeadingZeros(dimw / w) - 33;
+			}
+			if(h > dimh) {
+				zoom = Math.min(zoom, 31 - Integer.numberOfLeadingZeros(h / dimh));
+			} else {
+				zoom = Math.min(zoom, Integer.numberOfLeadingZeros(dimh / h) - 33);
+			}
+			System.out.println(zoom);
+			control.getDrawer().setView(zoom);
 		}
 	}
 	
@@ -198,7 +216,6 @@ public class EvolveManager implements Runnable {
 
 			EvolveManagerState evolveState = new EvolveManagerState(stepNumber, forcedState, algo);
 			
-
 			stateStack.add(evolveState);
 			control.onNewState(evolveState);
 			

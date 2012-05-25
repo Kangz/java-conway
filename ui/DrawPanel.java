@@ -85,6 +85,17 @@ public class DrawPanel extends JPanel {
 		applyTransform();
 	}
 	
+	public void setView(int z) {
+		zoom = z;
+		if(zoom < -19)
+			zoom = -19;
+		if(zoom > 8)
+			zoom = 8;
+		originx = getWidth()/2;
+		originy = getHeight()/2;
+		applyTransform();
+	}
+	
 	public int getZoom() {
 		return zoom;
 	}
