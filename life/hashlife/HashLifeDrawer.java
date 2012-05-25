@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import life.LifeDrawer;
 import life.LifeState;
 
-public class HashLifeDrawer implements LifeDrawer {
+class HashLifeDrawer implements LifeDrawer {
 	
 	@Override
 	public void draw(int x, int y, int zoom, LifeState state, BufferedImage b) {

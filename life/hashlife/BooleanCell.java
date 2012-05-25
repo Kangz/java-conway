@@ -1,9 +1,9 @@
 package life.hashlife;
 
-public class BooleanCell extends MacroCell {
+class BooleanCell extends MacroCell {
 
-	final public static BooleanCell on = new BooleanCell(1);
-	final public static BooleanCell off = new BooleanCell(0);
+	final static BooleanCell on = new BooleanCell(1);
+	final static BooleanCell off = new BooleanCell(0);
 	
 	final int v;
 	
@@ -13,27 +13,27 @@ public class BooleanCell extends MacroCell {
 	}
 	
 	@Override
-	public MacroCell quad(int i) {
+	MacroCell quad(int i) {
 		throw new RuntimeException("Can't get quads of a BooleanCell");
 	}
 
 	@Override
-	public MacroCell result(int s) {
+	MacroCell result(int s) {
 		throw new RuntimeException("Can't compute the result of a BooleanCell");
 	}
 
 	@Override
-	public void fillTab(int[][] tab, int i, int j) {
+	void fillTab(int[][] tab, int i, int j) {
 		tab[i][j] = v;
 	}
 
 	@Override
-	public MacroCell simplify() {
+	MacroCell simplify() {
 		throw new RuntimeException("Can't simplify a BooleanCell");
 	}
 
 	@Override
-	public MacroCell borderize() {
+	MacroCell borderize() {
 		throw new RuntimeException("Can't borderize a BooleanCell");
 	}
 

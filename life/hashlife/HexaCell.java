@@ -9,8 +9,9 @@ class HexaCell extends ComposedCell {
 		for(int i=0; i<4; i++)
 			this.quad[i] = (FourCell) quad[i];
 	}
-	
-	protected void calcResult(int s) {
+
+	@Override
+	void calcResult(int s) {
 		assert(s == 0);
 		int[] count = new int[4];
 		
@@ -40,7 +41,7 @@ class HexaCell extends ComposedCell {
 	}
 
 	@Override
-	public FourCell quad(int i) {
+	FourCell quad(int i) {
 		return quad[i];
 	}
 }

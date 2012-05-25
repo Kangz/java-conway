@@ -1,6 +1,8 @@
 # Java files
 *.class
+gc.log
 
 # Eclipse files
 .classpath
 .project
+.settings

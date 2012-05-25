@@ -6,11 +6,11 @@ import life.hashlife.MacroCell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Memoization {
+class Memoization {
 	static private ArrayList<MacroCell> empty = new ArrayList<MacroCell>();
 	static private HashMap<MacroCell, MacroCell> built = new HashMap<MacroCell, MacroCell>();
 
-	static public MacroCell get(MacroCell ... quad) {
+	static MacroCell get(MacroCell ... quad) {
 		assert(quad.length == 4 && quad[0].dim == quad[1].dim && quad[1].dim == quad[2].dim && quad[2].dim == quad[3].dim);
 		MacroCell m;
 		if(quad[0].dim == 0)
@@ -27,7 +27,7 @@ public class Memoization {
 		return m;
 	}
 	
-	static public MacroCell empty(int dim) {
+	static MacroCell empty(int dim) {
 		if(dim < 0)
 			throw new RuntimeException("The dimension of an empty MacroCell must be at least 0.");
 
@@ -43,7 +43,7 @@ public class Memoization {
 		return empty.get(dim);
 	}
 	
-	static public MacroCell fromTab(int[][] tab) {
+	static MacroCell fromTab(int[][] tab) {
 		if(tab == null || tab.length == 0)
 			return empty(1);
 		int h = tab.length, w = tab[0].length, dim;
@@ -56,7 +56,7 @@ public class Memoization {
 		return fromTab(tab, 0, 0, dim);
 	}
 	
-	static public MacroCell fromTab(int[][] tab, int i, int j, int dim) {
+	static private MacroCell fromTab(int[][] tab, int i, int j, int dim) {
 		if(dim == 0) {
 			if(i >= tab.length || j >= tab[i].length || tab[i][j] == 0)
 				return BooleanCell.off;

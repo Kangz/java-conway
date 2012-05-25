@@ -3,15 +3,15 @@ package life.hashlife;
 import life.LifeState;
 
 
-public class HashLifeState implements LifeState {
+class HashLifeState implements LifeState {
 
-	public MacroCell state;
+	MacroCell state;
 	
 	HashLifeState(MacroCell state) {
 		this.state = state.simplify();
 	}
 	
-	public HashLifeState(int[][] array) {
+	HashLifeState(int[][] array) {
 		this.state = Memoization.fromTab(array);
 	}
 	
@@ -23,19 +23,19 @@ public class HashLifeState implements LifeState {
 		return new HashLifeState(this);
 	}
 	
-	public int getCellAt(int x, int y) {
+	int getCellAt(int x, int y) {
 		return state.getCell(x + state.size/2, y + state.size/2);
 	}
 	
-	public void setCellAt(int x, int y, int newState) {
+	void setCellAt(int x, int y, int newState) {
 		state = state.setCell(x + state.size/2, y + state.size/2, newState);
 	}
 	
-	public int[][] toArray() {
+	int[][] toArray() {
 		return state.toTab();
 	}
 	
-	public void evolve(int steps) {
+	void evolve(int steps) {
 		int s = 32 - Integer.numberOfLeadingZeros(steps);
 		int n = 1<<s;
 		for(int i = 0; i<=s; i++)

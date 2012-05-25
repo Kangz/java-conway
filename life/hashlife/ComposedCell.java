@@ -22,7 +22,8 @@ class ComposedCell extends MacroCell {
 		}
 		return density/4;
 	}
-	
+
+	@Override
 	public boolean equals(Object o) {
 		if(!(o instanceof ComposedCell))
 			return false;
@@ -32,19 +33,21 @@ class ComposedCell extends MacroCell {
 				quad[2] == c.quad[2] &&
 				quad[3] == c.quad[3];
 	}
-	
+
+	@Override
 	public int hashCode() {
 		int hashCode = 1;
 		  for(int i=0; i<4; i++)
 		      hashCode = 31*hashCode + System.identityHashCode(quad[i]);
 		return hashCode;
 	}
-	
-	public MacroCell quad(int i) {
+
+	@Override
+	MacroCell quad(int i) {
 		return quad[i];
 	}
 	
-	protected void calcResult(int s) {
+	void calcResult(int s) {
 		MacroCell nine[][] = new MacroCell[3][3];
 		for(int i=0; i<4 ; i++) {
 			nine[(i/2)*2][(i%2)*2] = quad[i];
@@ -79,7 +82,7 @@ class ComposedCell extends MacroCell {
 	}
 	
 	@Override
-	public MacroCell result(int s) {
+	MacroCell result(int s) {
 		if(s > dim - 2)
 			throw new RuntimeException("Can't compute the result at time 2^"+s+" of a MacroCell of dim " + dim);
 		if(s < 0)
@@ -89,7 +92,8 @@ class ComposedCell extends MacroCell {
 		return result[s];
 	}
 
-	public void fillTab(int[][] tab, int i, int j) {
+	@Override
+	void fillTab(int[][] tab, int i, int j) {
 		if(off)
 			for(int k=0; k<size; k++)
 				for(int l=0; l<size; l++)
@@ -100,7 +104,7 @@ class ComposedCell extends MacroCell {
 	}
 
 	@Override
-	public MacroCell simplify() {
+	MacroCell simplify() {
 		if(off)
 			return Memoization.empty(1);
 		
@@ -121,7 +125,7 @@ class ComposedCell extends MacroCell {
 	}
 
 	@Override
-	public MacroCell borderize() {
+	MacroCell borderize() {
 		
 		if(off)
 			return Memoization.empty(dim+1);
