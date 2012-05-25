@@ -1,6 +1,9 @@
+import java.io.File;
+
 import ui.DrawPanel;
 import ui.LifeController;
 import ui.Window;
+import util.RLE;
 import life.EvolveManager;
 import life.LifeAlgo;
 import life.hashlife.*;
@@ -14,7 +17,7 @@ public class Main {
 	
 	static void testApp() {
 		LifeAlgo a = new HashLifeAlgo();
-		int[][] init = {{0}};
+		int[][] init = RLE.read(new File("media/ticker.rle"));
 		a.loadFromArray(init);
 		
 		LifeController controller = new LifeController();
