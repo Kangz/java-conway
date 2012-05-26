@@ -214,9 +214,7 @@ public class EvolveManager implements Runnable {
 
 			EvolveManagerState evolveState = new EvolveManagerState(stepNumber, forcedState, algo);
 			
-			if(! preventEvolve){
-				stateStack.add(evolveState);
-			}
+			stateStack.add(evolveState);
 			control.onNewState(evolveState);
 			
 			forcedState = false;
