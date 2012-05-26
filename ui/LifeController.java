@@ -19,6 +19,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	
 	protected DrawPanel drawer;
 	protected EvolveManager evolver;
+	StatusBar statusBar;
 	protected Point lastMousePos = new Point(0, 0);
 	protected boolean leftButton = false;
 	protected boolean paused = false;
@@ -39,6 +40,10 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	
 	public void setEvolver(EvolveManager evolver) {
 		this.evolver = evolver;
+	}
+	
+	public void setStatusBar(StatusBar bar) {
+		this.statusBar = bar;
 	}
 	
 	public void loadFromFile(File f) {
