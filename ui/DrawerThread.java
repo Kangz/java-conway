@@ -119,7 +119,7 @@ public class DrawerThread implements Runnable {
 	
 	public EvolveManagerState getLastDrawnState(){
 		synchronized(lastDrawLock){
-			return lastDraw.evolverState;
+			return (lastDraw == null)?null:lastDraw.evolverState;
 		}
 	}
 	

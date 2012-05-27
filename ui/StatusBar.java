@@ -15,15 +15,16 @@ class StatusBar extends JLabel {
 		setPreferredSize(new Dimension(100, 16));
 		
 		info = "Normal mode";
-		speed = 0;
-		numSteps = 0;
+		speed = 1;
+		numSteps = 1;
 		
 		refresh();
 		controller.setStatusBar(this);
 	}
 	
 	public void refresh() {
-		String msg = info + " / Speed "+speed+" / Step "+numSteps;
+		String sSpeed = (speed >= 0)?Integer.toString(1<<speed):("1/"+(1<<-speed));
+		String msg = info + " | Speed : "+sSpeed+" | Step : "+numSteps;
 		setText(msg);
 	}
 	

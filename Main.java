@@ -17,20 +17,20 @@ public class Main {
 	}
 	
 	static void testApp() {
-		LifeAlgo a = new NaiveAlgo();
-		int[][] init = RLE.read(new File("media/ticker.rle"));
-		a.loadFromArray(init);
-		
+		LifeAlgo a = new HashLifeAlgo();
 		LifeController controller = new LifeController();
 		
+		
 		Window w = new Window(controller);
-		w.setVisible(true);
+		EvolveManager evolver = new EvolveManager(controller, a);
+		controller.loadFromFile(new File("media/ticker.rle"));
 
 		DrawPanel drawer = w.getDrawPanel();
-		EvolveManager evolver = new EvolveManager(controller, a);
 
 		drawer.addListener(controller);
+		w.setVisible(true);
 		w.getDrawPanel().start();
+		
 
 		evolver.run();
 	}

@@ -49,7 +49,6 @@ public class EvolveManager implements Runnable {
 			int dimh = array.length;
 			int w = control.getDrawer().getWidth(), h = control.getDrawer().getHeight();
 			int zoom;
-			System.out.println(w - dimw);
 			if(w > dimw) {
 				zoom = 31 - Integer.numberOfLeadingZeros(w / dimw);
 			} else {
@@ -60,7 +59,6 @@ public class EvolveManager implements Runnable {
 			} else {
 				zoom = Math.min(zoom, Integer.numberOfLeadingZeros(dimh / h) - 33);
 			}
-			System.out.println(zoom);
 			control.getDrawer().setView(zoom);
 		}
 	}
