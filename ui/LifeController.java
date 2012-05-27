@@ -47,11 +47,15 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	}
 	
 	public void loadFromFile(File f) {
+		statusBar.setInfo("Loading...");
 		evolver.loadFromFile(f);
+		statusBar.setInfo("Normal mode");
 	}
 	
 	public void saveToFile(File f) {
+		statusBar.setInfo("Saving...");
 		evolver.saveToFile(f);
+		statusBar.setInfo("Normal mode");
 	}
 
 	public void setSpeed(int s){
@@ -63,6 +67,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 			drawer.getDrawer().setInterval(33 << -s);
 			evolver.setSpeed(sign);
 		}
+		statusBar.setSpeed(s);
 	}
 	
 	public void componentResized(ComponentEvent e) {
@@ -193,5 +198,6 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	
 	public void onNewState(EvolveManagerState s){
 		drawer.getDrawer().addOp(s.algo.getDrawer(), s.algo.getState(), s.forced, s);
+		statusBar.setNumSteps(s.nSteps);
 	}
 }

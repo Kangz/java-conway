@@ -1,6 +1,7 @@
 package life.naive;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -13,36 +14,23 @@ public class NaiveDrawer implements LifeDrawer {
 
 	@Override
 	public void draw(int x, int y, int zoom, LifeState state, BufferedImage b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-//DLM
-	public void drawSmaller(int x, int y, int zoom, List<Position2D> positions, Graphics2D g, int height, int width) {
-		//Zoom will not be lower than -21 anyway
-		int[][] counters = new int[width][height];
-		char[] pixels = new char[width*height];
-		int div = 1 >> -zoom;
-		
-		for (Position2D pos : positions) {
-			int posx = pos.x / div - x;
-			int posy = pos.y / div - y;
-			
-			if (posx < 0 ||
-				posy < 0 ||
-				posx > width ||
-				posy > height) {
-				continue;
-			}
-			counters[posx][posy] ++;
-		}
-
-		for (int i=0; i<width; i++) {
-			for (int j=0; j<height; j++) {
-				pixels[i*width + j] /= (div/256);
+		List<Position2D> alive = ((NaiveState) state).getAliveCells();
+		Graphics g = b.getGraphics();
+		g.setColor(Color.white);
+		int w = b.getWidth(), h = b.getHeight();
+		int cellSize = (zoom<0)?(1<<-zoom):(1<<zoom);
+		int factor = (zoom<0)?(1<<-zoom):(1<<zoom);
+		for(Position2D p : alive) {
+			if(zoom < 0) {
+				if(x + p.x/factor <= 0 || x + p.x/factor >= w || y + p.y/factor <= 0 || y + p.y/factor >= h)
+					continue;
+				int rgb = Color.white.getRGB();
+				b.setRGB(x + p.x/factor, y + p.y/factor, rgb);
+			} else {
+				if(x + p.x*factor + cellSize <= 0 || x + p.x*factor >= w || y + p.y*factor + cellSize <= 0 || y + p.y*factor >= h)
+					continue;
+				g.fillRect(x + p.x*factor, y + p.y*factor, cellSize, cellSize);
 			}
 		}
-
-		g.drawChars(pixels, 0, width*height, 0, 0);
 	}
 }

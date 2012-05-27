@@ -19,7 +19,7 @@ public class NaiveState implements LifeState {
 		for (int i=0; i<array.length; i++) {
 			for (int j=0; j<array[i].length; j++) {
 				if (array[i][j] == 1) {
-					aliveCells.add(new Position2D(i, j));
+					aliveCells.add(new Position2D(j, i));
 				}
 			}
 		}
@@ -52,6 +52,8 @@ public class NaiveState implements LifeState {
 		for (Position2D pos : getAliveCells()) {
 			for (int offsetx = -1; offsetx <= 1; offsetx ++) {
 				for (int offsety = -1; offsety <= 1; offsety ++) {
+					if(offsetx == 0 && offsety == 0)
+						continue;
 					Position2D current = new Position2D(pos.x + offsetx, pos.y + offsety);
 					if (! counters.containsKey(current)) {
 						counters.put(current, 1);
@@ -68,7 +70,7 @@ public class NaiveState implements LifeState {
 			Position2D pos = entry.getKey();
 			int counter = entry.getValue();
 			
-			if (counter == 2 || (counter == 3 && aliveCells.contains(pos))) {
+			if (counter == 3 || (counter == 2 && aliveCells.contains(pos))) {
 				newAlive.add(pos);
 			}
 		}
@@ -93,10 +95,10 @@ public class NaiveState implements LifeState {
 			if (pos.y > maxy) maxy = pos.y;
 		}
 		
-		int[][] array = new int[maxx - minx + 1][maxy - miny + 1];
+		int[][] array = new int[maxy - miny + 1][maxx - minx + 1];
 		
 		for (Position2D pos : aliveCells) {
-			array[pos.x - minx][pos.y - miny] = 1;
+			array[pos.y - miny][pos.x - minx] = 1;
 		}
 		
 		return array;

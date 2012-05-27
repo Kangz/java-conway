@@ -11,7 +11,7 @@ public class NaiveAlgo implements LifeAlgo {
 	@Override
 	public void setState(LifeState state) {
 		if (state instanceof NaiveState) {
-			s = (NaiveState) state;
+			s = ((NaiveState) state).copy();
 		} else {
 			throw new RuntimeException("NaiveLife.loadState needs a NaiveState");
 		}

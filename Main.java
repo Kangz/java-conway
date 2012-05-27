@@ -7,6 +7,7 @@ import util.RLE;
 import life.EvolveManager;
 import life.LifeAlgo;
 import life.hashlife.*;
+import life.naive.NaiveAlgo;
 
 public class Main {
 	
@@ -16,7 +17,7 @@ public class Main {
 	}
 	
 	static void testApp() {
-		LifeAlgo a = new HashLifeAlgo();
+		LifeAlgo a = new NaiveAlgo();
 		int[][] init = RLE.read(new File("media/ticker.rle"));
 		a.loadFromArray(init);
 		
