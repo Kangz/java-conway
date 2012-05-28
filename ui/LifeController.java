@@ -25,9 +25,9 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	protected boolean paused = false;
 	protected int speed = 0;
 	protected boolean reverse = false;
+	protected int buffer = 0;
 	
 	public LifeController() {
-		
 	}
 	
 	public void setDrawer(DrawPanel p) {
@@ -49,15 +49,17 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	public void loadFromFile(File f) {
 		statusBar.setInfo("Loading...");
 		evolver.loadFromFile(f);
-		statusBar.setInfo("Normal mode");
 	}
 	
 	public void saveToFile(File f) {
 		statusBar.setInfo("Saving...");
 		evolver.saveToFile(f);
-		statusBar.setInfo("Normal mode");
 	}
 
+	public void setModeInfo(){
+		statusBar.setInfo((paused ? "Paused" : "Running") + " - " + (reverse ? "Reverse" : "Normal"));
+	}
+	
 	public void setSpeed(int s){
 		int sign = reverse ? -1 : 1;
 		if (s >= 0){
@@ -161,6 +163,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 
 			case KeyEvent.VK_P:
 				paused = ! paused;
+				setModeInfo();
 				drawer.getDrawer().setPaused(paused);
 				break;
 			case KeyEvent.VK_Y:
@@ -174,10 +177,35 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 			case KeyEvent.VK_R:
 				reverse = ! reverse;
 				setSpeed(speed);
+				setModeInfo();
 				drawer.getDrawer().flushOps();
 				break;
-
+				
+			case KeyEvent.VK_ESCAPE:
+				buffer = 0;
+				statusBar.setCommand(buffer);
+			case KeyEvent.VK_J:
+				if(buffer != 0){
+					evolver.jump(buffer);
+					buffer = 0;
+					statusBar.setCommand(buffer);
+				}
+			case KeyEvent.VK_H:
+				if(buffer != 0){
+					evolver.jump(-buffer);
+					buffer = 0;
+					statusBar.setCommand(buffer);
+				}				
+				
 			default:
+				char c = e.getKeyChar();
+				if('0' <= c && c <= '9') {
+					buffer = buffer*10 + (c - '0');
+					if(buffer >= 1000000){
+						buffer /= 10;
+					}
+					statusBar.setCommand(buffer);
+				}
 				break;
 		}
 	}
@@ -197,6 +225,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	}
 	
 	public void onNewState(EvolveManagerState s){
+		setModeInfo();
 		drawer.getDrawer().addOp(s.algo.getDrawer(), s.algo.getState(), s.forced, s);
 		if(drawer.getDrawer().getLastDrawnState() != null)
 			statusBar.setNumSteps(drawer.getDrawer().getLastDrawnState().nSteps);

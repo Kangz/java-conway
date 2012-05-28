@@ -10,6 +10,7 @@ class StatusBar extends JLabel {
 	private String info;
 	private long numSteps;
 	private int speed;
+	private int command;
 	
 	public StatusBar(LifeController controller) {
 		setPreferredSize(new Dimension(100, 16));
@@ -17,6 +18,7 @@ class StatusBar extends JLabel {
 		info = "Normal mode";
 		speed = 1;
 		numSteps = 1;
+		command = 0;
 		
 		refresh();
 		controller.setStatusBar(this);
@@ -24,7 +26,7 @@ class StatusBar extends JLabel {
 	
 	public void refresh() {
 		String sSpeed = (speed >= 0)?Integer.toString(1<<speed):("1/"+(1<<-speed));
-		String msg = info + " | Speed : "+sSpeed+" | Step : "+numSteps;
+		String msg = info + " | Speed: "+sSpeed+" | Step: "+numSteps + " | " + /*algo + */ " | Command: " + command;
 		setText(msg);
 	}
 	
@@ -40,6 +42,10 @@ class StatusBar extends JLabel {
 	
 	public void setNumSteps(long n) {
 		numSteps = n;
+		refresh();
+	}
+	public void setCommand(int i) {
+		command = i;
 		refresh();
 	}
 }

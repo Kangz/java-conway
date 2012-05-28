@@ -13,6 +13,7 @@ public class EvolveManager implements Runnable {
 	LifeAlgo algo;
 	LifeController control;
 	int speed = 1;
+	int currentSpeed = 1;
 	boolean running = false;
 	boolean forcedState = false;
 	boolean preventEvolve = false;
@@ -78,7 +79,17 @@ public class EvolveManager implements Runnable {
 			forcedState = true;
 		}
 	}
-
+	
+	class JumpOrder extends Order{
+		int askedSpeed;
+		JumpOrder(int s){
+			askedSpeed = s;
+		}
+		void doOrder(){
+			currentSpeed = askedSpeed;
+		}
+	}
+	
 	class PreventEvolveOrder extends Order{
 		void doOrder(){
 			preventEvolve = true;
@@ -129,6 +140,13 @@ public class EvolveManager implements Runnable {
 			orders.add(new ToggleCellOrder(x, y));
 			orders.add(new ForcedOrder());
 			orders.add(new PreventEvolveOrder());
+		}
+	}
+	
+	public void jump(int steps){
+		synchronized(orders){
+			orders.add(new JumpOrder(steps));
+			orders.add(new ForcedOrder());
 		}
 	}
 	
@@ -183,13 +201,14 @@ public class EvolveManager implements Runnable {
 				copiedOrders = orders;
 				orders = new LinkedList<Order>();
 			}
+
+			currentSpeed = speed;			
 			
 			for(Order order : copiedOrders){
 				order.doOrder();
 			}
 
 			if(! preventEvolve){
-				int currentSpeed = speed;
 				if(currentSpeed >= 0){
 					algo.evolve(currentSpeed);
 					stepNumber += currentSpeed;

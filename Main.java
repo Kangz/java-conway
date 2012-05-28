@@ -3,11 +3,9 @@ import java.io.File;
 import ui.DrawPanel;
 import ui.LifeController;
 import ui.Window;
-import util.RLE;
 import life.EvolveManager;
 import life.LifeAlgo;
 import life.hashlife.*;
-import life.naive.NaiveAlgo;
 
 public class Main {
 	
