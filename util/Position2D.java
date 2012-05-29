@@ -6,10 +6,15 @@ package util;
 public class Position2D {
 	
     /**
-     * The coordinates of the position.
+     * The line.
      */
-    public final int x, y;
-	
+    public final int x;
+
+    /**
+     * The column.
+     */
+    public final int y;
+
 	public boolean equals(Object o) {
 		if (! (o instanceof Position2D) ) {
 			return false;
