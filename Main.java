@@ -15,7 +15,7 @@ public class Main {
 	}
 	
 	static void testApp() {
-		LifeAlgo a = new HashLifeAlgo();
+		LifeAlgo a = new HashlifeAlgo();
 		LifeController controller = new LifeController();
 		
 		

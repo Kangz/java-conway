@@ -67,7 +67,7 @@ class Memoization {
 	 * @param array the source array
 	 * @return the built MacroCell
 	 */
-	static MacroCell fromTab(int[][] array) {
+	static MacroCell fromArray(int[][] array) {
 		if(array == null || array.length == 0)
 			return empty(1);
 		int h = array.length, w = array[0].length, dim;

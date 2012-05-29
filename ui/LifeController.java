@@ -178,7 +178,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				reverse = ! reverse;
 				setSpeed(speed);
 				setModeInfo();
-				drawer.getDrawer().flushOps();
+				drawer.getDrawer().flushDraws();
 				break;
 				
 			case KeyEvent.VK_ESCAPE:
@@ -218,15 +218,15 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 
 	public boolean needsMoreEvolve() {
 		if(!reverse){
-			return (! paused) && drawer.getDrawer().opLength() < 4;
+			return (! paused) && drawer.getDrawer().getPendingDrawsLength() < 4;
 		}else{
-			return (! paused) && drawer.getDrawer().opLength() < 1;
+			return (! paused) && drawer.getDrawer().getPendingDrawsLength() < 1;
 		}
 	}
 	
 	public void onNewState(EvolveManagerState s){
 		setModeInfo();
-		drawer.getDrawer().addOp(s.algo.getDrawer(), s.algo.getState(), s.forced, s);
+		drawer.getDrawer().addDraw(s.algo.getDrawer(), s.algo.getState(), s.forced, s);
 		if(drawer.getDrawer().getLastDrawnState() != null)
 			statusBar.setNumSteps(drawer.getDrawer().getLastDrawnState().nSteps);
 	}

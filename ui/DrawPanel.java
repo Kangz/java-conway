@@ -31,7 +31,7 @@ public class DrawPanel extends JPanel {
 
 	public void start() {
 		applyTransform();
-		dt.setDim(getWidth(), getHeight());
+		dt.setDimension(getWidth(), getHeight());
 		Thread t = new Thread(dt);
 		t.start();		
 	}
@@ -46,7 +46,7 @@ public class DrawPanel extends JPanel {
 	}
 	
 	public void onResize() {
-		dt.setDim(getWidth(), getHeight());
+		dt.setDimension(getWidth(), getHeight());
 		dt.requestAnimFrame();
 	}
 	

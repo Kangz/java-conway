@@ -51,10 +51,10 @@ abstract class MacroCell {
 	/**
 	 * @return an int array representing the MacroCell
 	 */
-	final int[][] toTab() {
-		int[][] tab = new int[size][size];
-		fillArray(tab, 0, 0);
-		return tab;
+	final int[][] toArray() {
+		int[][] array = new int[size][size];
+		fillArray(array, 0, 0);
+		return array;
 	}
 	
 	/**

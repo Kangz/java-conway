@@ -4,16 +4,22 @@ import life.LifeAlgo;
 import life.LifeDrawer;
 import life.LifeState;
 
-public class HashLifeAlgo implements LifeAlgo {
-	
-	HashLifeState s;
+/**
+ * An implementation of the interface LifeAlgo for the Hashlife algorithm.
+ */
+public class HashlifeAlgo implements LifeAlgo {
+
+	/**
+	 * The current state of the algorithm, represented by a HashlifeState.
+	 */
+	HashlifeState s;
 	
 	@Override
 	public void setState(LifeState state) {
-		if (state instanceof HashLifeState) {
-			s = ((HashLifeState) state).copy();
+		if (state instanceof HashlifeState) {
+			s = ((HashlifeState) state).copy();
 		} else {
-			throw new RuntimeException("NaiveLife.loadState needs a HashLifeState");
+			throw new RuntimeException("HashlifeAlgo.setState needs a HashlifeState");
 		}
 	}
 
@@ -24,12 +30,12 @@ public class HashLifeAlgo implements LifeAlgo {
 
 	@Override
 	public LifeDrawer getDrawer() {
-		return new HashLifeDrawer();
+		return new HashlifeDrawer();
 	}
 
 	@Override
 	public void loadFromArray(int[][] array) {
-		s = new HashLifeState(array);
+		s = new HashlifeState(array);
 	}
 
 	@Override

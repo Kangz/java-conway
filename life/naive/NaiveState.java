@@ -9,10 +9,18 @@ import life.LifeState;
 
 import util.Position2D;
 
+/**
+ * A specialized LifeState for the Naive algorithm.
+ */
 public class NaiveState implements LifeState {
 
 	private ArrayList<Position2D> aliveCells;
-	
+
+	/**
+	 * Initialize the NaiveState with an array.
+	 * 
+	 * @param array an int array
+	 */
 	NaiveState(int[][] array) {
 		aliveCells = new ArrayList<Position2D>();
 		
@@ -24,20 +32,36 @@ public class NaiveState implements LifeState {
 			}
 		}
 	}
-	
+
+	/**
+	 * @param other another NaiveState
+	 */
 	NaiveState(NaiveState other) {
 		aliveCells = new ArrayList<Position2D>();
 		aliveCells.addAll(other.aliveCells);
 	}
-	
+
+	/**
+	 * @return a copy of this NaiveState
+	 */
 	NaiveState copy() {
 		return new NaiveState(this);
 	}
-	
+
+	/**
+	 * @param x the x coordinate of the cell to get
+	 * @param y the y coordinate of the cell to get
+	 * @return the state of the cell
+	 */
 	int getCellAt(int x, int y) {
 		return aliveCells.contains(new Position2D(x, y)) ? 1 : 0;
 	}
 	
+	/**
+	 * @param x the x coordinate of the cell to get
+	 * @param y the y coordinate of the cell to get
+	 * @param newState the new state of the cell
+	 */
 	void setCellAt(int x, int y, int state) {
 		if (state == 1) {
 			aliveCells.add(new Position2D(x, y));
@@ -46,6 +70,9 @@ public class NaiveState implements LifeState {
 		}
 	}
 	
+	/**
+	 * Perform a single step forward.
+	 */
 	void evolveOnce() {
 		HashMap<Position2D, Integer> counters = new HashMap<Position2D, Integer>();
 		
@@ -78,10 +105,16 @@ public class NaiveState implements LifeState {
 		aliveCells = newAlive;
 	}
 	
+	/**
+	 * @return a List containing the positions of every alive cell.
+	 */
 	List<Position2D> getAliveCells() {
 		return aliveCells;
 	}
 
+	/**
+	 * @return an array representing the state of the universe
+	 */
 	int[][] toArray() {
 		int minx = Integer.MAX_VALUE;
 		int maxx = Integer.MIN_VALUE;

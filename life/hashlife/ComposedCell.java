@@ -36,7 +36,7 @@ class ComposedCell extends MacroCell {
 		}
 		return density/4;
 	}
-
+	
 	@Override
 	public boolean equals(Object o) {
 		if(!(o instanceof ComposedCell))

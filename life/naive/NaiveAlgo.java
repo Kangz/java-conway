@@ -4,8 +4,14 @@ import life.LifeAlgo;
 import life.LifeDrawer;
 import life.LifeState;
 
+/**
+ * An implementation of the interface LifeAlgo for the Naive algorithm.
+ */
 public class NaiveAlgo implements LifeAlgo {
-	
+
+	/**
+	 * The current state of the algorithm, represented by a NaiveState.
+	 */
 	NaiveState s;
 	
 	@Override
@@ -13,7 +19,7 @@ public class NaiveAlgo implements LifeAlgo {
 		if (state instanceof NaiveState) {
 			s = ((NaiveState) state).copy();
 		} else {
-			throw new RuntimeException("NaiveLife.loadState needs a NaiveState");
+			throw new RuntimeException("NaiveAlgo.setState needs a NaiveState");
 		}
 	}
 
