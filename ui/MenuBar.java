@@ -7,8 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
+/**
+ * A very basic menu bar, to have some shortcuts.
+ */
 public class MenuBar extends JMenuBar {
 	
+	/**
+	 * Construct the MenuBar.
+	 * 
+	 * @param controller the controller to link the MenuBar to
+	 */
 	public MenuBar(final LifeController controller) {
 		final JMenu menu = new JMenu("File");
 		

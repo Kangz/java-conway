@@ -1,6 +1,5 @@
 import java.io.File;
 
-import ui.DrawPanel;
 import ui.LifeController;
 import ui.Window;
 import life.EvolveManager;
@@ -23,11 +22,9 @@ public class Main {
 		EvolveManager evolver = new EvolveManager(controller, a);
 		controller.loadFromFile(new File("media/ticker.rle"));
 
-		DrawPanel drawer = w.getDrawPanel();
-
-		drawer.addListener(controller);
+		w.panel.drawPanel.addListener(controller);
 		w.setVisible(true);
-		w.getDrawPanel().start();
+		w.panel.drawPanel.start();
 		
 
 		evolver.run();

@@ -76,7 +76,9 @@ public class DrawerThread implements Runnable {
 	private DrawState lastDraw;
 	private Object lastDrawLock = new Object();
 	
-	
+	/**
+	 * @param container the component on which we will repain
+	 */
 	public DrawerThread(JComponent container) {
 		this.component = container;
 	}
