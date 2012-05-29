@@ -14,6 +14,8 @@ import java.io.File;
 
 import life.EvolveManager;
 import life.EvolveManagerState;
+import life.hashlife.HashlifeAlgo;
+import life.naive.NaiveAlgo;
 
 /**
  * The controller part, run mainly by the awt thread and with callbacks
@@ -32,7 +34,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	protected int speed = 0;
 	protected boolean reverse = false;
 	protected int buffer = 0;
-	
+	protected boolean hashlifeAlgo = true;
 	/**
 	 * constructs a new LifeController
 	 */
@@ -65,6 +67,8 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	 */
 	public void setStatusBar(StatusBar bar) {
 		this.statusBar = bar;
+		this.statusBar.setSpeed(speed);
+		this.statusBar.setAlgoName("Hashlife");
 	}
 	
 	/**
@@ -217,6 +221,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				break;
 			case KeyEvent.VK_R:
 				reverse = ! reverse;
+				evolver.resetState(drawer.getDrawer().getLastDrawnState());
 				setSpeed(speed);
 				setModeInfo();
 				drawer.getDrawer().flushDraws();
@@ -225,18 +230,36 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 			case KeyEvent.VK_ESCAPE:
 				buffer = 0;
 				statusBar.setCommand(buffer);
+				break;
 			case KeyEvent.VK_J:
 				if(buffer != 0){
+					evolver.resetState(drawer.getDrawer().getLastDrawnState());
 					evolver.jump(buffer);
 					buffer = 0;
 					statusBar.setCommand(buffer);
 				}
+				break;
 			case KeyEvent.VK_H:
 				if(buffer != 0){
+					evolver.resetState(drawer.getDrawer().getLastDrawnState());
 					evolver.jump(-buffer);
 					buffer = 0;
 					statusBar.setCommand(buffer);
-				}				
+				}
+				break;
+
+			case KeyEvent.VK_A:
+				hashlifeAlgo = ! hashlifeAlgo;
+				if(hashlifeAlgo){
+					evolver.resetState(drawer.getDrawer().getLastDrawnState());
+					evolver.changeAlgo(new HashlifeAlgo());
+					this.statusBar.setAlgoName("Hashlife");
+				}else{
+					evolver.resetState(drawer.getDrawer().getLastDrawnState());
+					evolver.changeAlgo(new NaiveAlgo());
+					this.statusBar.setAlgoName("Naive");
+				}
+				break;
 				
 			default:
 				char c = e.getKeyChar();

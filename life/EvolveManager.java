@@ -42,14 +42,30 @@ public class EvolveManager implements Runnable {
 	
 	//Flushes the history
 	class FlushHistoryOrder extends Order{
-		FlushHistoryOrder() {
+		boolean clearSteps;
+		FlushHistoryOrder(boolean clear) {
+			clearSteps = clear;
 		}
 		void doOrder() {
 			stateStack.clear();
-			stepNumber = 0;
+			if(clearSteps){
+				stepNumber = 0;
+			}
 		}
 	}
 
+	class ChangeAlgoOrder extends Order{
+		LifeAlgo newAlgo;
+		ChangeAlgoOrder(LifeAlgo a){
+			newAlgo = a;
+		}
+		void doOrder() {
+			int[][] state = algo.saveToArray();
+			newAlgo.loadFromArray(state);
+			algo = newAlgo;
+		}
+	}
+	
 	//Allows to feed a state to go back to
 	class ResetFromStateOrder extends Order{
 		EvolveManagerState state;
@@ -169,6 +185,7 @@ public class EvolveManager implements Runnable {
 	 */
 	public void loadFromFile(File f){
 		synchronized(orders){
+			orders.add(new FlushHistoryOrder(true));
 			orders.add(new LoadFromFileOrder(f));
 			orders.add(new ForcedOrder());
 			orders.add(new PreventEvolveOrder());
@@ -328,6 +345,15 @@ public class EvolveManager implements Runnable {
 	public void resetState(EvolveManagerState lastDrawnState) {
 		synchronized(orders){
 			orders.add(new ResetFromStateOrder(lastDrawnState));
+		}
+	}
+
+	public void changeAlgo(LifeAlgo algo) {
+		synchronized(orders){
+			orders.add(new FlushHistoryOrder(false));
+			orders.add(new ChangeAlgoOrder(algo));
+			orders.add(new JumpOrder(0));
+			orders.add(new ForcedOrder());
 		}
 	}
 }

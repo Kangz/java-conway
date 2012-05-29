@@ -14,6 +14,7 @@ class StatusBar extends JLabel {
 	private long numSteps;
 	private int speed;
 	private int command;
+	private String algo;
 	
 	/**
 	 * @param controller the LifeController to link the StatusBar to.
@@ -35,8 +36,12 @@ class StatusBar extends JLabel {
 	 */
 	public void refresh() {
 		String sSpeed = (speed >= 0)?Integer.toString(1<<speed):("1/"+(1<<-speed));
-		String msg = info + " | Speed: "+sSpeed+" | Step: "+numSteps + " | " + /*algo + */ " | > " + command;
+		String msg = info + " | Speed: "+sSpeed+" | Step: "+numSteps + " | " + algo + " | > " + command;
 		setText(msg);
+	}
+	
+	public void setAlgoName(String name){
+		algo = name;
 	}
 	
 	/**
