@@ -6,3 +6,10 @@ gc.log
 .classpath
 .project
 .settings
+
+# LaTeX files
+.texlipse
+*.aux
+*.log
+*.pdf
+*.gz
