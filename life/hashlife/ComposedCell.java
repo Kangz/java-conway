@@ -93,14 +93,14 @@ class ComposedCell extends MacroCell {
 	}
 
 	@Override
-	void fillTab(int[][] tab, int i, int j) {
+	void fillArray(int[][] array, int i, int j) {
 		if(off)
 			for(int k=0; k<size; k++)
 				for(int l=0; l<size; l++)
-					tab[i+k][j+l] = 0;
+					array[i+k][j+l] = 0;
 		else
 			for(int k=0; k<4; k++)
-				quad[k].fillTab(tab, i+(k/2)*(size/2), j+(k%2)*(size/2));
+				quad[k].fillArray(array, i+(k/2)*(size/2), j+(k%2)*(size/2));
 	}
 
 	@Override

@@ -23,8 +23,8 @@ class BooleanCell extends MacroCell {
 	}
 
 	@Override
-	void fillTab(int[][] tab, int i, int j) {
-		tab[i][j] = v;
+	void fillArray(int[][] array, int i, int j) {
+		array[i][j] = v;
 	}
 
 	@Override
