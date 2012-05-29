@@ -10,8 +10,18 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * An utility class to make the link between a RLE file
+ * and an integers array.
+ */
 public class RLE {
 	
+    /**
+     * Read a RLE file and convert it into an integers array.
+     *
+     * @param file the File to write into
+     * @return the integers array produced from the file
+     */
 	static public int[][] read(File file) {
 		Scanner in;
 		try {
@@ -72,6 +82,12 @@ public class RLE {
 		
 	}
 	
+    /**
+     * Write an integers array to a RLE file.
+     * 
+     * @param file the File to write into
+     * @param tab the integers array to be written
+     */
 	static public void write(File file, int[][] tab) {
 		try {
 			BufferedWriter out;
