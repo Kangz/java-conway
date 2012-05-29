@@ -15,11 +15,17 @@ import java.io.File;
 import life.EvolveManager;
 import life.EvolveManagerState;
 
+/**
+ * The controller part, run mainly by the awt thread and with callbacks
+ * for the other parts.
+ */
 public class LifeController extends ComponentAdapter implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener{
-	
+	//the other objects
 	protected DrawPanel drawer;
 	protected EvolveManager evolver;
 	StatusBar statusBar;
+	
+	//keep track of the different parameters
 	protected Point lastMousePos = new Point(0, 0);
 	protected boolean leftButton = false;
 	protected boolean paused = false;
@@ -27,39 +33,66 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 	protected boolean reverse = false;
 	protected int buffer = 0;
 	
+	/**
+	 * constructs a new LifeController
+	 */
 	public LifeController() {
 	}
 	
+	/**
+	 * @param p the DrawPanel to be give to the controller
+	 */
 	public void setDrawer(DrawPanel p) {
 		this.drawer = p;
 	}
 	
+	/**
+	 * @return the associated DrawPanel()
+	 */
 	public DrawPanel getDrawer() {
 		return drawer;
 	}
 	
+	/**
+	 * @param e set the associated evolver
+	 */
 	public void setEvolver(EvolveManager evolver) {
 		this.evolver = evolver;
 	}
 	
+	/**
+	 * @param bar set the associated status bar
+	 */
 	public void setStatusBar(StatusBar bar) {
 		this.statusBar = bar;
 	}
 	
+	/**
+	 * @param f the file to load from
+	 */
 	public void loadFromFile(File f) {
 		statusBar.setInfo("Loading...");
 		evolver.loadFromFile(f);
 	}
 	
+	/**
+	 * @param f the file to save to
+	 */
 	public void saveToFile(File f) {
 		statusBar.setInfo("Saving...");
 		evolver.saveToFile(f);
 	}
 
+	/**
+	 * Sets the mode part of the status bar
+	 */
 	public void setModeInfo(){
 		statusBar.setInfo((paused ? "Paused" : "Running") + " - " + (reverse ? "Reverse" : "Normal"));
 	}
 	
+	/**
+	 * @param s the speed to run in power of two
+	 */
 	public void setSpeed(int s){
 		int sign = reverse ? -1 : 1;
 		if (s >= 0){
@@ -72,10 +105,14 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 		statusBar.setSpeed(s);
 	}
 	
+	/**
+	 * triggered when the window is resized
+	 */
 	public void componentResized(ComponentEvent e) {
 		drawer.onResize();
 	}
 	
+	//The callbacks for the different inputs are quite self-explaining
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int i = e.getWheelRotation();
 		if(i < 0){
@@ -89,6 +126,8 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 		if(paused && e.getButton() == MouseEvent.BUTTON3) {
 			Point pt = e.getPoint();
 			Point origin = drawer.getOrigin();
+			
+			//Compute the coordinates of the clicked cell
 			int zoom = drawer.getZoom();
 			int x = pt.x - origin.x, y = pt.y - origin.y;
 			if(zoom >= 0) {
@@ -98,6 +137,8 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				x <<= -zoom;
 				y <<= -zoom;
 			}
+			
+			//asks the evolver to toggle it
 			evolver.resetState(drawer.getDrawer().getLastDrawnState());
 			evolver.toggleCell(y, x);
 		}
