@@ -25,6 +25,17 @@ public class EvolveManager implements Runnable {
 	abstract class Order{
 		abstract void doOrder();
 	}
+	
+	class FlushHistoryOrder extends Order{
+		FlushHistoryOrder() {
+			
+		}
+		
+		void doOrder() {
+			stateStack.clear();
+			stepNumber = 0;
+		}
+	}
 
 	class ResetFromStateOrder extends Order{
 		EvolveManagerState state;

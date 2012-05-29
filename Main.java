@@ -10,17 +10,17 @@ public class Main {
 	
 	static public void main(String[] args) {
 		
-		testApp();
+		app();
 	}
 	
-	static void testApp() {
+	static void app() {
 		LifeAlgo a = new HashlifeAlgo();
 		LifeController controller = new LifeController();
 		
 		
 		Window w = new Window(controller);
 		EvolveManager evolver = new EvolveManager(controller, a);
-		controller.loadFromFile(new File("media/ticker.rle"));
+		controller.loadFromFile(new File("media/puffer.rle"));
 
 		w.panel.drawPanel.addListener(controller);
 		w.setVisible(true);
