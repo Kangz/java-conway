@@ -6,6 +6,9 @@ import life.hashlife.MacroCell;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A static class responsible for the memoization of all built MacroCell.
+ */
 class Memoization {
 	static private ArrayList<MacroCell> empty = new ArrayList<MacroCell>();
 	static private HashMap<MacroCell, MacroCell> built = new HashMap<MacroCell, MacroCell>();

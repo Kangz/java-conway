@@ -1,10 +1,24 @@
 package life.hashlife;
 
+/**
+ * A basic MacroCell of size 1x1, representing a single cell.
+ */
 class BooleanCell extends MacroCell {
 
+	/**
+	 * The base on cell.
+	 */
 	final static BooleanCell on = new BooleanCell(1);
+	
+	/**
+	 * The base off cell.
+	 */
 	final static BooleanCell off = new BooleanCell(0);
 	
+	/**
+	 * 0 = off<br />
+	 * 1 = on
+	 */
 	final int v;
 	
 	private BooleanCell(int v) {

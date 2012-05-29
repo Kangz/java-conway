@@ -1,9 +1,16 @@
 package life.hashlife;
 
+/**
+ * A MacroCell of size 4x4, composed of four HexaCell.
+ */
 class HexaCell extends ComposedCell {
 
 	final FourCell[] quad = new FourCell[4];
 
+	/**
+	 * Builds a HexaCell out of its four FourCell.
+	 * @param quad the four quadrants of the HexaCell
+	 */
 	HexaCell(MacroCell ... quad) {
 		super(quad);
 		for(int i=0; i<4; i++)

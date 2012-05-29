@@ -1,5 +1,8 @@
 package life.hashlife;
 
+/**
+ * An abstract class to represent a MacroCell.
+ */
 abstract class MacroCell {
 
 	/**
@@ -37,7 +40,7 @@ abstract class MacroCell {
 	
 	/**
 	 * The result of a MacroCell is the state of the central MacroCell,
-	 * whose dimension is n-1, after 2^(n-2) steps.
+	 * whose dimension is dim-1, after 2^(dim-2) steps.
 	 * 
 	 * @return the result of the MacroCell
 	 */
@@ -55,10 +58,10 @@ abstract class MacroCell {
 	}
 	
 	/**
-	 * 0 = north-west
-	 * 1 = north-east
-	 * 2 = south-west
-	 * 3 = south-east
+	 * 0 = north-west<br />
+	 * 1 = north-east<br />
+	 * 2 = south-west<br />
+	 * 3 = south-east<br />
 	 * 
 	 * @param i an integer from 0 to 3
 	 * @return one of the four quads in the MacroCell
@@ -67,6 +70,7 @@ abstract class MacroCell {
 	
 	/**
 	 * Compute the result of the MacroCell, but after 2^s steps.
+	 * 0 <= s <= dim-2
 	 *
 	 * @param s gives the number of steps to do
 	 * @return the result
@@ -98,9 +102,9 @@ abstract class MacroCell {
 	 * Fill the given array with the current state of the MacroCell,
 	 * starting at (i,j).
 	 * 
-	 * @param array
-	 * @param i
-	 * @param j
+	 * @param array the array to be filled
+	 * @param i the line of the first cell
+	 * @param j the column of the first cell
 	 */
 	abstract void fillArray(int[][] array, int i, int j);
 	

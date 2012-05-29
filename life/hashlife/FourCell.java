@@ -1,9 +1,16 @@
 package life.hashlife;
 
+/**
+ * A MacroCell of size 2x2, composed of four BooleanCell.
+ */
 class FourCell extends ComposedCell {
 	
 	final int[] quad = new int[4];
-	
+
+	/**
+	 * Builds a FourCell out of its four BooleanCell.
+	 * @param quad the four quadrants of the FourCell
+	 */
 	FourCell(MacroCell ... quad) {
 		super(quad);
 		for(int i=0; i<4; i++)

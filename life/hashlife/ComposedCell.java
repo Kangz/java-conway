@@ -1,10 +1,24 @@
 package life.hashlife;
 
+/**
+ * The standard MacroCell, with its four quadrants.
+ */
 class ComposedCell extends MacroCell {
 	
+	/**
+	 * The array of the four quadrants.
+	 */
 	final MacroCell[] quad ;
+	
+	/**
+	 * The array of the already computed results.
+	 */
 	final MacroCell result[];
 	
+	/**
+	 * Builds a ComposedCell out of its four MacroCell.
+	 * @param quad the four quadrants of the ComposedCell
+	 */
 	ComposedCell(MacroCell ... quad) {
 		super(	quad[0].dim+1, 
 				quad[0].off && 
@@ -47,6 +61,11 @@ class ComposedCell extends MacroCell {
 		return quad[i];
 	}
 	
+	/**
+	 * Computes the result after 2^s steps.
+	 * 
+	 * @param s gives the number of steps to do.
+	 */
 	void calcResult(int s) {
 		MacroCell nine[][] = new MacroCell[3][3];
 		for(int i=0; i<4 ; i++) {
