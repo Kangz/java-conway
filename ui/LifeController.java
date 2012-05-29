@@ -201,7 +201,7 @@ public class LifeController extends ComponentAdapter implements MouseMotionListe
 				char c = e.getKeyChar();
 				if('0' <= c && c <= '9') {
 					buffer = buffer*10 + (c - '0');
-					if(buffer >= 1000000){
+					if(buffer >= 100000000){
 						buffer /= 10;
 					}
 					statusBar.setCommand(buffer);

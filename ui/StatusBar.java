@@ -35,7 +35,7 @@ class StatusBar extends JLabel {
 	 */
 	public void refresh() {
 		String sSpeed = (speed >= 0)?Integer.toString(1<<speed):("1/"+(1<<-speed));
-		String msg = info + " | Speed: "+sSpeed+" | Step: "+numSteps + " | " + /*algo + */ " | Command: " + command;
+		String msg = info + " | Speed: "+sSpeed+" | Step: "+numSteps + " | " + /*algo + */ " | > " + command;
 		setText(msg);
 	}
 	
