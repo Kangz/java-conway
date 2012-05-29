@@ -20,7 +20,7 @@ public class Main {
 		
 		Window w = new Window(controller);
 		EvolveManager evolver = new EvolveManager(controller, a);
-		controller.loadFromFile(new File("media/puffer.rle"));
+		controller.loadFromFile(new File("media/ticker.rle"));
 
 		w.panel.drawPanel.addListener(controller);
 		w.setVisible(true);
