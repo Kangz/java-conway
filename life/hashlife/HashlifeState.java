@@ -75,12 +75,12 @@ class HashlifeState implements LifeState {
 		int n = 1<<s;
 		
 		//Make sure we can go as far in the futur as we want
-		//for(int i = 0; i<=s; i++)
-		//state = state.borderize().borderize();
+		for(int i = 0; i<=s; i++)
+		state = state.borderize().borderize();
 		//We are using a binary decomposition as state.result(s) works with powers of two
 		while(n > 0) {
 			if((steps&n) != 0){
-				state = state.borderize().borderize().result(s);
+				state = state.result(s).borderize();
 			}
 			n /= 2;
 			s--;
